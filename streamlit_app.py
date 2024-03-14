@@ -103,7 +103,7 @@ if authentication_status:
     df["Year-Semester"] = df["Year"].astype(str) + "-S" + df["Semester"].astype(str)
     
     # Assuming 'UNIDADE' and 'OS' are columns in your DataFrame for concatenation
-    df["UNIDADE+OS"] = df["UNIDADE"] + '-' + df["OS"]
+    # df["UNIDADE+OS"] = df["UNIDADE"] + '-' + df["OS"]
     
     # Sort the unique values in ascending order
     unique_year_month = sorted(df["Year-Month"].unique())

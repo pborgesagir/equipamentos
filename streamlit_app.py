@@ -313,6 +313,46 @@ if authentication_status:
 
 
 
+    
+   
+    
+    # Filter for "CORRETIVA" in "tipomanutencao"
+    corrective_df = filtered_df[filtered_df["tipomanutencao"] == "CORRETIVA"]
+    
+    # Group by "tag" and count occurrences of corrective maintenance
+    corrective_counts = corrective_df.groupby("tag").size().reset_index(name='Corrective Count')
+    
+    # Calculate the age of equipment as the oldest between 'cadastro' and 'instalacao'
+    filtered_df["cadastro"] = pd.to_datetime(filtered_df["cadastro"], errors='coerce')
+    filtered_df["instalacao"] = pd.to_datetime(filtered_df["instalacao"], errors='coerce')
+    filtered_df["Equipment Age"] = filtered_df[["cadastro", "instalacao"]].max(axis=1)
+    filtered_df["Today"] = pd.to_datetime("today")
+    filtered_df["Equipment Age (Days)"] = (filtered_df["Today"] - filtered_df["Equipment Age"]).dt.days
+    
+    # Merge with corrective_counts to associate the count with each equipment
+    mtbf_df = pd.merge(filtered_df, corrective_counts, on="tag")
+    
+    # Calculate MTBF as age in days divided by the count of corrective maintenance
+    mtbf_df["MTBF"] = mtbf_df["Equipment Age (Days)"] / mtbf_df["Corrective Count"]
+    
+    # Plotting
+    fig = px.scatter(mtbf_df, x="Equipment Age (Days)", y="MTBF", color="familia",
+                     title="Mean Time Between Failures (MTBF) by Equipment",
+                     labels={"MTBF": "Mean Time Between Failures (Days)", "Equipment Age (Days)": "Equipment Age (Days)"},
+                     hover_data=["tag", "familia"])
+    
+    # Enhance layout
+    fig.update_layout(xaxis_title="Equipment Age (Days)",
+                      yaxis_title="MTBF (Days)",
+                      legend=dict(title="Família"),
+                      title_x=0.5)  # Center the chart title
+    
+    # Display the chart
+    col4.plotly_chart(fig, use_container_width=True)
+
+
+
+
 
 
 

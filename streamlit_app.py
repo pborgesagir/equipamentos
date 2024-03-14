@@ -122,7 +122,7 @@ if authentication_status:
     desired_empresa = df["empresa"].unique().tolist()
     desired_empresa.insert(0, "Todos")
     
-    empresa = st.sidebar.multiselect("empresa", desired_empresa, default=desired_empresa[0])
+    empresa = st.sidebar.multiselect("Unidade", desired_empresa, default=desired_empresa[0])
 
 
     # Define the list of "familia" values and add "Todos" as an option

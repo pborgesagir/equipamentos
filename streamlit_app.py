@@ -444,7 +444,6 @@ if authentication_status:
                  title='Top 20 CORRETIVA Maintenance by Setor',
                  labels={'count': 'Number of CORRETIVA', 'setor': 'Setor'},
                  template='plotly_white',
-                 color='setor',  # Color by 'setor' for differentiation
                  height=600)  # Adjust height if necessary
     
     # Improve layout

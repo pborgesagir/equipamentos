@@ -122,7 +122,7 @@ if authentication_status:
     desired_empresa = df["empresa"].unique().tolist()
     desired_empresa.insert(0, "Todos")
     
-    empresa = st.sidebar.multiselect("Unidade", desired_empresa, default=desired_empresa[0])
+    empresa = st.sidebar.multiselect("UNIDADE", desired_empresa, default=desired_empresa[0])
 
 
     # Define the list of "familia" values and add "Todos" as an option
@@ -130,14 +130,14 @@ if authentication_status:
     desired_numero_familia.insert(0, "Todos")
     
     # Create a filter for selecting "familia"
-    numero_familia = st.sidebar.multiselect("familia", desired_numero_familia, default=desired_numero_familia[0])
+    numero_familia = st.sidebar.multiselect("FAMÍLIA", desired_numero_familia, default=desired_numero_familia[0])
 
     # Define the list of "tipomanutencao" values and add "Todos" as an option
     desired_numero_tipomanutencao = df["tipomanutencao"].unique().tolist()
     desired_numero_tipomanutencao.insert(0, "Todos")
     
     # Create a filter for selecting "tipomanutencao"
-    numero_tipomanutencao = st.sidebar.multiselect("tipomanutencao", desired_numero_tipomanutencao, default=desired_numero_tipomanutencao[0])
+    numero_tipomanutencao = st.sidebar.multiselect("TIPO DE MANUTENÇÃO", desired_numero_tipomanutencao, default=desired_numero_tipomanutencao[0])
 
 
     # Define the list of "setor" values and add "Todos" as an option
@@ -145,7 +145,7 @@ if authentication_status:
     desired_numero_setor.insert(0, "Todos")
     
     # Create a filter for selecting "setor"
-    numero_setor = st.sidebar.multiselect("setor", desired_numero_setor, default=desired_numero_setor[0])
+    numero_setor = st.sidebar.multiselect("SETOR", desired_numero_setor, default=desired_numero_setor[0])
 
     
     
@@ -193,4 +193,4 @@ if authentication_status:
     
     
     # Display the DataFrame in Streamlit
-    st.dataframe(df)
+    st.dataframe(filtered_df)

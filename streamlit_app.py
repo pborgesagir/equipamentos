@@ -374,9 +374,9 @@ if authentication_status:
                      template='plotly_white')
     
     # Enhance layout
-    fig.update_layout(xaxis_title="Equipment Age (Years)",
-                      yaxis_title="MTBF (Years)",
-                      legend_title="Familia",
+    fig.update_layout(xaxis_title="Idade do Equipamento (Anos)",
+                      yaxis_title="MTBF (Anos)",
+                      legend_title="Família",
                       title_x=0.5,
                       height=800)  # Center the chart title
     

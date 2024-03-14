@@ -353,7 +353,7 @@ if authentication_status:
     
     # Plot the bar chart for average MTBF per familia
     fig = px.bar(avg_mtbf_per_familia, x='familia', y='MTBF',
-                 title='MTBF por Fámilia',
+                 title='MTBF por Família',
                  labels={'MTBF': 'MTBF (anos)', 'familia': 'Família'},
                  template='plotly_white')
     

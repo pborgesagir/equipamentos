@@ -81,9 +81,19 @@ if authentication_status:
     df = df.sort_values("fechamento")
 
 
-    # Convert the "fechamento" column to datetime with errors='coerce'
-    df["fechamento"] = pd.to_datetime(df["fechamento"], format='%m/%d/%Y %H:%M:%S', errors='coerce')
-    df["abertura"] = pd.to_datetime(df["abertura"], format='%m/%d/%Y %H:%M:%S', errors='coerce')
+    # Ensure both 'abertura' and 'fechamento' are in datetime format
+    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
+    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
+    
+    # Drop rows where dates could not be parsed
+    filtered_df = filtered_df.dropna(subset=['abertura', 'fechamento'])
+    
+    # Now group by month
+    monthly_abertura = filtered_df.groupby(filtered_df['abertura'].dt.to_period('M')).size().rename('Abertas')
+    monthly_fechamento = filtered_df.groupby(filtered_df['fechamento'].dt.to_period('M')).size().rename('Fechadas')
+
+# Continue with the rest of your data processing and plotting as before
+
     
     # Filter out rows where the date could not be parsed (NaT)
     df = df.dropna(subset=["fechamento"])

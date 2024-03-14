@@ -395,23 +395,15 @@ if authentication_status:
 
     
 
-
-    # Assuming 'corretiva_with_age' is your DataFrame and it contains columns 'tag' and 'equipamento'
-    
-    # Create a new column combining 'tag' and 'equipamento'
-    corretiva_with_age['tag_equipamento'] = corretiva_with_age['tag'] + " - " + corretiva_with_age['equipamento']
-    
-    # Now sort and select the top 20 equipments with the lowest MTBF
+    # Top 20 Equipments with the Lowest MTBF (in months)
     top20_equipments_lowest_mtbf = corretiva_with_age.sort_values('MTBF_months', ascending=True).head(20)
     
-    # Assuming 'corretiva_with_age' is your DataFrame and it contains a column named 'equipamento'
-
-    # Plot for col8 - Vertical Bar Chart using 'equipamento' instead of 'tag'
-    fig_col8 = px.bar(top20_equipments_lowest_mtbf, x='equipamento', y='MTBF_months',
+    # Plot for col8 - Vertical Bar Chart
+    fig_col8 = px.bar(top20_equipments_lowest_mtbf, x='tag', y='MTBF_months',
                       title='Top 20 Equipments with Lowest MTBF (Months)',
-                      labels={'MTBF_months': 'Mean Time Between Failures (Months)', 'equipamento': 'Equipment'},
+                      labels={'MTBF_months': 'Mean Time Between Failures (Months)', 'tag': 'Equipment Tag'},
                       template='plotly_white')
-    fig_col8.update_layout(xaxis_title="Equipment", yaxis_title="MTBF (Months)", title_x=0.5, coloraxis_showscale=False)
+    fig_col8.update_layout(xaxis_title="Equipment Tag", yaxis_title="MTBF (Months)", title_x=0.5, coloraxis_showscale=False)
     col8.plotly_chart(fig_col8, use_container_width=True)
 
 

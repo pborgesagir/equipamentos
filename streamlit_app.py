@@ -77,7 +77,7 @@ if authentication_status:
     st.sidebar.title(f"Bem-vindo, {name}")
     conn = st.connection("gsheets", type=GSheetsConnection)
     
-    df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(12)))
+    df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(13)))
     df = df.sort_values("fechamento")
 
 

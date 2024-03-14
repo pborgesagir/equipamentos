@@ -360,7 +360,7 @@ if authentication_status:
     # Enhance layout
     fig.update_layout(xaxis_title="Familia",
                       yaxis_title="Average MTBF (Years)",
-                      title_x=0.5
+                      title_x=0.5,
                       height=1200)  # Center the chart title
     
     # Display the chart in col5

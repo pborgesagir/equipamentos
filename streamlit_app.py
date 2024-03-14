@@ -279,6 +279,50 @@ if authentication_status:
     col2.plotly_chart(fig, use_container_width=True)
 
 
+    # Calculate the percentage of 'fechadas'/'abertas'
+    monthly_data['Percentage Closed'] = (monthly_data['fechamento'] / monthly_data['abertura']) * 100
+    
+    # Prepare the data for the goal line (Meta)
+    goal_data = pd.DataFrame({
+        'Year-Month': monthly_data['Year-Month'],
+        'Goal': 85
+    })
+    
+    # Create a line chart for the percentage closed over time
+    fig = go.Figure()
+    
+    # Add the trend line for the percentage closed
+    fig.add_trace(go.Scatter(
+        x=monthly_data['Year-Month'],
+        y=monthly_data['Percentage Closed'],
+        mode='lines+markers',
+        name='Percentage Closed',
+        marker=dict(color='RoyalBlue')
+    ))
+    
+    # Add the goal line
+    fig.add_trace(go.Scatter(
+        x=goal_data['Year-Month'],
+        y=goal_data['Goal'],
+        mode='lines',
+        name='Goal (85%)',
+        line=dict(dash='dash', color='FireBrick')
+    ))
+    
+    # Improve the layout
+    fig.update_layout(
+        title='Tendência de Fechamento de OS (%)',
+        xaxis_title='Mês',
+        yaxis_title='Percentual Fechado (%)',
+        legend_title='Legenda',
+        title_x=0.5
+    )
+    
+    # Show the figure in the Streamlit app
+    col3.plotly_chart(fig, use_container_width=True)
+
+
+
 
 
 

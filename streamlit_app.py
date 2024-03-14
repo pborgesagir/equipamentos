@@ -488,7 +488,28 @@ if authentication_status:
     if user_comment:
         st.write("Your comment:", user_comment)
     
-    # You might want to save the comment to a database or file depending on your application's requirements
+    # Function to generate PDF
+    def create_pdf(comment):
+        buffer = BytesIO()
+        c = canvas.Canvas(buffer, pagesize=letter)
+        c.drawString(100,750, "Report Generated from Streamlit App")
+        c.drawString(100,730, f"User Comment: {comment}")
+        # Here you can add more content to the PDF as needed
+        c.showPage()
+        c.save()
+        buffer.seek(0)
+        return buffer
+    
+    # Function to create a download link for the PDF
+    def create_download_link(pdf_buffer, filename):
+        b64 = base64.b64encode(pdf_buffer.read()).decode()
+        href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download PDF Report</a>'
+        return href
+    
+    # Generate and download PDF
+    if st.button("Generate and Download PDF"):
+        pdf_buffer = create_pdf(user_comment)
+        st.markdown(create_download_link(pdf_buffer, "streamlit_report.pdf"), unsafe_allow_html=True)
 
 
 

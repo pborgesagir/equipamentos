@@ -501,25 +501,33 @@ if authentication_status:
 
 
 
-    # Calculate 'tempo de resolução' in days
+    # Ensure 'abertura' is in datetime format
+    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
+    
+    # Calculate 'tempo de resolução' as the difference between 'fechamento' and 'abertura' in days
     filtered_df['tempo_de_resolucao'] = (filtered_df['fechamento'] - filtered_df['abertura']).dt.days
     
-    # Group by a period (e.g., by 'Year-Month') and calculate the mean 'tempo de resolução'
-    avg_resolucao_by_period = filtered_df.groupby('Year-Month')['tempo_de_resolucao'].mean().reset_index()
+    # Aggregate the data to get average 'tempo de resolução' by a time period, e.g., 'Year-Month'
+    avg_tempo_resolucao_per_period = filtered_df.groupby('Year-Month')['tempo_de_resolucao'].mean().reset_index()
     
-    # Plot the line chart using Plotly
-    fig = px.line(avg_resolucao_by_period, x='Year-Month', y='tempo_de_resolucao',
+    # Sort the DataFrame by 'Year-Month' to ensure the line chart follows a chronological order
+    avg_tempo_resolucao_per_period = avg_tempo_resolucao_per_period.sort_values('Year-Month')
+    
+    # Plot the tendency line chart for 'Tempo médio de resolução'
+    fig = px.line(avg_tempo_resolucao_per_period, x='Year-Month', y='tempo_de_resolucao',
                   title='Tempo Médio de Resolução por Mês',
-                  labels={'tempo_de_resolucao': 'Tempo Médio de Resolução (Dias)', 'Year-Month': 'Período'},
-                  markers=True)  # Adding markers makes it easier to see individual data points
+                  labels={'tempo_de_resolucao': 'Tempo Médio de Resolução (Dias)', 'Year-Month': 'Mês'},
+                  markers=True,  # Add markers to each data point for better visibility
+                  template='plotly_white')
     
     # Enhance layout
-    fig.update_layout(xaxis_title="Período",
+    fig.update_layout(xaxis_title="Mês",
                       yaxis_title="Tempo Médio de Resolução (Dias)",
-                      title_x=0.5)  # Center the chart title
+                      title_x=0.5)
     
     # Display the chart in col12
     col12.plotly_chart(fig, use_container_width=True)
+
 
 
     st.title("Customize a sua análise")

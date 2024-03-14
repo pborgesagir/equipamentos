@@ -424,18 +424,7 @@ if authentication_status:
     col8.plotly_chart(fig_col8, use_container_width=True)
 
 
-    # Assuming the same filtering and grouping from the previous instructions
-    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
-    grouped_setor = corretiva_df.groupby(['setor', 'empresa']).size().reset_index(name='count')
-    
-    # Sort values for better readability (optional)
-    grouped_setor_sorted = grouped_setor.sort_values(['setor', 'empresa'])
-    
-    # Create a table with Plotly
-    fig = ff.create_table(grouped_setor_sorted)
-    
-    # Display the table
-    fig.show()
+
 
 
 
@@ -445,23 +434,29 @@ if authentication_status:
     # Group by 'empresa' and 'setor', then count occurrences
     corretiva_grouped = corretiva_df.groupby(['empresa', 'setor']).size().reset_index(name='count')
     
-    # Sort the results for better visualization, if needed
-    corretiva_grouped = corretiva_grouped.sort_values(['empresa', 'count'], ascending=[False, True])
+    # Sort the results by count, descending, to get the top occurrences
+    corretiva_grouped_sorted = corretiva_grouped.sort_values('count', ascending=False).head(20)
     
-    # Use Plotly to create a table for display
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=list(corretiva_grouped.columns),
-                    fill_color='paleturquoise',
-                    align='left'),
-        cells=dict(values=[corretiva_grouped.empresa, corretiva_grouped.setor, corretiva_grouped['count']],
-                   fill_color='lavender',
-                   align='left'))
-    ])
+    # Plot the bar chart using Plotly
+    fig = px.bar(corretiva_grouped_sorted,
+                 x='count',
+                 y='empresa',
+                 color='setor',  # Color by 'setor' for differentiation
+                 title='Top 20 CORRETIVA by Empresa and Setor',
+                 labels={'count': 'Number of CORRETIVA', 'empresa': 'Empresa', 'setor': 'Setor'},
+                 template='plotly_white',
+                 height=600)  # Adjust height if necessary
     
-    fig.update_layout(title='Corretivas por Empresa e Setor')
+    # Improve layout
+    fig.update_layout(xaxis_title="Number of CORRETIVA",
+                      yaxis_title="Empresa",
+                      legend_title="Setor",
+                      title_x=0.5,  # Center the chart title
+                      yaxis={'categoryorder': 'total ascending'})  # Ensure the highest values are at the top
     
-    # Display the table in col9 (assuming you're using Streamlit for visualization)
+    # Display the chart in col9 (assuming Streamlit or a similar framework for visualization)
     col9.plotly_chart(fig, use_container_width=True)
+
 
 
 

@@ -368,7 +368,7 @@ if authentication_status:
     
     # Plot the scatter plot for MTBF vs. Equipment Age colored by Familia
     fig = px.scatter(corretiva_with_age, x='equipment_age', y='MTBF', color='familia',
-                     title='MTBF vs. Equipment Age by Familia',
+                     title='MTBF por família',
                      labels={'equipment_age': 'Equipment Age (Years)', 'MTBF': 'Mean Time Between Failures (Years)'},
                      hover_data=['tag'],  # Show equipment 'tag' on hover
                      template='plotly_white')

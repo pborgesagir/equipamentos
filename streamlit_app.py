@@ -2,6 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from io import BytesIO
+from streamlit_gsheets import GSheetsConnection
 
 # Set Streamlit page configuration
 st.set_page_config(

@@ -231,9 +231,17 @@ if authentication_status:
 
 
 
-    # Calculate the monthly counts for "abertura" and "fechamento"
+        # Ensure both 'abertura' and 'fechamento' are in datetime format
+    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
+    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
+    
+    # Drop rows where dates could not be parsed
+    filtered_df = filtered_df.dropna(subset=['abertura', 'fechamento'])
+    
+    # Now group by month
     monthly_abertura = filtered_df.groupby(filtered_df['abertura'].dt.to_period('M')).size().rename('Abertas')
     monthly_fechamento = filtered_df.groupby(filtered_df['fechamento'].dt.to_period('M')).size().rename('Fechadas')
+
     
     # Combine the counts into a single DataFrame
     monthly_data = pd.concat([monthly_abertura, monthly_fechamento], axis=1)

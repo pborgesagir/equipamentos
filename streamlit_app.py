@@ -78,26 +78,26 @@ if authentication_status:
     conn = st.connection("gsheets", type=GSheetsConnection)
     
     df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(12)))
-    df = df.sort_values("cadastro")
+    df = df.sort_values("fechamento")
 
 
-    # Convert the "cadastro" column to datetime with errors='coerce'
-    df["cadastro"] = pd.to_datetime(df["cadastro"], format='%m/%d/%Y %H:%M:%S', errors='coerce')
+    # Convert the "fechamento" column to datetime with errors='coerce'
+    df["fechamento"] = pd.to_datetime(df["fechamento"], format='%m/%d/%Y %H:%M:%S', errors='coerce')
     
     # Filter out rows where the date could not be parsed (NaT)
-    df = df.dropna(subset=["cadastro"])
+    df = df.dropna(subset=["fechamento"])
     
     # Extract year, month, and quarter
-    df["Year"] = df["cadastro"].dt.year
-    df["Month"] = df["cadastro"].dt.month
-    df["Quarter"] = df["cadastro"].dt.quarter
-    df["Semester"] = np.where(df["cadastro"].dt.month.isin([1, 2, 3, 4, 5, 6]), 1, 2)
+    df["Year"] = df["fechamento"].dt.year
+    df["Month"] = df["fechamento"].dt.month
+    df["Quarter"] = df["fechamento"].dt.quarter
+    df["Semester"] = np.where(df["fechamento"].dt.month.isin([1, 2, 3, 4, 5, 6]), 1, 2)
     
     # Create a "Year-Quarter" column
     df["Year-Quarter"] = df["Year"].astype(str) + "-Q" + df["Quarter"].astype(str)
     
     # If you want to create a "Year-Month" column, you can use the following line
-    df["Year-Month"] = df["cadastro"].dt.strftime("%Y-%m")
+    df["Year-Month"] = df["fechamento"].dt.strftime("%Y-%m")
     
     # Create a "Year-Semester" column
     df["Year-Semester"] = df["Year"].astype(str) + "-S" + df["Semester"].astype(str)

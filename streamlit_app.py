@@ -439,6 +439,29 @@ if authentication_status:
 
 
 
+    # Filter for 'CORRETIVA' in 'tipomanutencao'
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    
+    # Group by 'empresa' and 'setor', then count occurrences
+    corretiva_grouped = corretiva_df.groupby(['empresa', 'setor']).size().reset_index(name='count')
+    
+    # Sort the results for better visualization, if needed
+    corretiva_grouped = corretiva_grouped.sort_values(['empresa', 'count'], ascending=[True, False])
+    
+    # Use Plotly to create a table for display
+    fig = go.Figure(data=[go.Table(
+        header=dict(values=list(corretiva_grouped.columns),
+                    fill_color='paleturquoise',
+                    align='left'),
+        cells=dict(values=[corretiva_grouped.empresa, corretiva_grouped.setor, corretiva_grouped['count']],
+                   fill_color='lavender',
+                   align='left'))
+    ])
+    
+    fig.update_layout(title='Corretivas por Empresa e Setor')
+    
+    # Display the table in col9 (assuming you're using Streamlit for visualization)
+    col9.plotly_chart(fig, use_container_width=True)
 
 
 

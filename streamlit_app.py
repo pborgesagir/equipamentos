@@ -423,6 +423,33 @@ if authentication_status:
     col8.plotly_chart(fig_col8, use_container_width=True)
 
 
+    # Filter for 'CORRETIVA' in 'tipomanutencao'
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    
+    # Group by 'setor' and 'empresa', then count occurrences
+    grouped_setor = corretiva_df.groupby(['setor', 'empresa']).size().reset_index(name='count')
+    
+    # Create a bar chart grouping by 'empresa'
+    fig = px.bar(grouped_setor,
+                 x='setor',
+                 y='count',
+                 color='empresa',  # Groups by 'empresa'
+                 barmode='group',  # Ensures that bars are grouped and not stacked
+                 title='Contagem de Manutenções Corretivas por Setor e Empresa',
+                 labels={'count': 'Quantidade', 'setor': 'Setor', 'empresa': 'Empresa'},
+                 template='plotly_white')
+    
+    # Improve layout
+    fig.update_layout(xaxis_title="Setor",
+                      xaxis={'categoryorder': 'total descending'},  # Optional: sort sectors by total count
+                      yaxis_title="Quantidade de Manutenções Corretivas",
+                      legend_title="Empresa",
+                      title_x=0.5)  # Center the chart title
+    
+    # Display the chart in col9
+    col9.plotly_chart(fig, use_container_width=True)
+
+
 
 
 

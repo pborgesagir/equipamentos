@@ -353,8 +353,8 @@ if authentication_status:
     
     # Plot the bar chart for average MTBF per familia
     fig = px.bar(avg_mtbf_per_familia, x='familia', y='MTBF',
-                 title='Average MTBF per Familia',
-                 labels={'MTBF': 'Average MTBF (Years)', 'familia': 'Familia'},
+                 title='MTBF por Fámilia',
+                 labels={'MTBF': 'MTBF (anos)', 'familia': 'Família'},
                  template='plotly_white')
     
     # Enhance layout
@@ -409,7 +409,7 @@ if authentication_status:
                       title='Top 10 Familias de menor MTBF (Mês)',
                       labels={'MTBF_months': 'MTBF (meses)', 'familia': 'Família'},
                       template='plotly_white')
-    fig_col7.update_layout(xaxis_title="Familia", yaxis_title="Average MTBF (Months)", title_x=0.5)
+    fig_col7.update_layout(xaxis_title="Família", yaxis_title="MTBF (meses)", title_x=0.5)
     col7.plotly_chart(fig_col7, use_container_width=True)
 
     

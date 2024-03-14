@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
+# from streamlit_option_menu import option_menu
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 import streamlit.components.v1 as components

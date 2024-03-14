@@ -229,6 +229,54 @@ if authentication_status:
 
 
 
+    # Calculate the monthly counts for "abertura" and "fechamento"
+    monthly_abertura = filtered_df.groupby(filtered_df['abertura'].dt.to_period('M')).size().rename('Abertas')
+    monthly_fechamento = filtered_df.groupby(filtered_df['fechamento'].dt.to_period('M')).size().rename('Fechadas')
+    
+    # Combine the counts into a single DataFrame
+    monthly_data = pd.concat([monthly_abertura, monthly_fechamento], axis=1)
+    
+    # Calculate the percentage of "fechamento" over "abertura"
+    monthly_data['Resultado (%)'] = (monthly_data['Fechadas'] / monthly_data['Abertas']) * 100
+    
+    # Reset the index to turn it into a column for plotting
+    monthly_data = monthly_data.reset_index()
+
+
+
+    # Create a bar chart for "abertura" and "fechamento" by month
+    fig = px.bar(monthly_data, x='abertura', y=['Abertas', 'Fechadas'],
+                 title='Atendimento de manutenções corretivas')
+    
+    # Add a trend line for the percentage
+    fig.add_traces(go.Scatter(x=monthly_data['abertura'], y=monthly_data['Resultado (%)'],
+                              mode='lines+markers', name='Resultado (%)',
+                              yaxis='y2'))
+    
+    # Set up the second y-axis for the percentage
+    fig.update_layout(
+        yaxis2=dict(
+            title='Resultado (%)',
+            overlaying='y',
+            side='right'
+        ),
+        yaxis=dict(
+            title='Quantidade'
+        )
+    )
+    
+    # Add a horizontal line for the goal ("meta")
+    fig.add_hline(y=85, line_dash="dot",
+                  annotation_text="Meta = 85%",
+                  annotation_position="bottom right")
+    
+    # Plot the figure in the specified column
+    col2.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
     
     
     # Display the DataFrame in Streamlit

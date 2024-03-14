@@ -377,7 +377,8 @@ if authentication_status:
     fig.update_layout(xaxis_title="Equipment Age (Years)",
                       yaxis_title="MTBF (Years)",
                       legend_title="Familia",
-                      title_x=0.5)  # Center the chart title
+                      title_x=0.5
+                      height=800))  # Center the chart title
     
     # Display the chart in col6
     col6.plotly_chart(fig, use_container_width=True)

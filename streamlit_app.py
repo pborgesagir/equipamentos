@@ -197,12 +197,12 @@ if authentication_status:
     
     
     col1 = st.columns(1)[0]
-    col2 = st.columns(1)[0]
-    col3 = st.columns(1)[0]
+    col2, col3 = st.columns(2)
     col4 = st.columns(1)[0]
     col5 = st.columns(1)[0]
     col6 = st.columns(1)[0]
     col7 = st.columns(1)[0]
+    col8 = st.columns(1)[0]
 
 
     # Import necessary libraries (Plotly) - already imported in your provided code

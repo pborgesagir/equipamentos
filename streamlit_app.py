@@ -83,6 +83,7 @@ if authentication_status:
 
     # Convert the "fechamento" column to datetime with errors='coerce'
     df["fechamento"] = pd.to_datetime(df["fechamento"], format='%m/%d/%Y %H:%M:%S', errors='coerce')
+    df["abertura"] = pd.to_datetime(df["abertura"], format='%m/%d/%Y %H:%M:%S', errors='coerce')
     
     # Filter out rows where the date could not be parsed (NaT)
     df = df.dropna(subset=["fechamento"])

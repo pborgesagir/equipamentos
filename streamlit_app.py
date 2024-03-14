@@ -464,6 +464,26 @@ if authentication_status:
 
 
 
+    # Calculate the overall average MTBF
+    avg_mtbf = corretiva_with_age['MTBF'].mean()
+    # Format the average MTBF to display with two decimal places
+    formatted_avg_mtbf = "{:.2f} years".format(avg_mtbf)
+    col10.subheader('Average MTBF 🕒')
+    col10.metric(label='', value=formatted_avg_mtbf, delta=None)
+    
+    
+    
+    # Count the occurrences of "CORRETIVA"
+    num_corretivas = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].shape[0]
+    col11.subheader('Number of CORRETIVAS 🛠️')
+    col11.metric(label='', value=num_corretivas, delta=None)
+
+
+
+
+
+
+
 
 
 

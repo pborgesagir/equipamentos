@@ -216,7 +216,6 @@ if authentication_status:
                  orientation='h',  # This makes the bar chart horizontal
                  title='Quantidade por Tipo de Manutenção',
                  labels={'count': 'Quantidade', 'tipomanutencao': 'Tipo de Manutenção'},
-                 color='tipomanutencao',  # Color bars by 'tipomanutencao'
                  template='plotly_white')  # Use a clean template
     
     # Improve layout

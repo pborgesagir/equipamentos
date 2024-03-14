@@ -501,7 +501,10 @@ if authentication_status:
 
     st.title("Customize a sua análise")
 
-    pyg_html = pyg.walk(df, return_html=True)
+    # Generate the HTML using Pygwalker
+    pyg_html = pyg.to_html(df)
+     
+    # Embed the HTML into the Streamlit app
     components.html(pyg_html, height=1000, scrolling=True)
 
 

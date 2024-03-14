@@ -401,7 +401,7 @@ if authentication_status:
     fig_col8 = px.bar(top20_equipments_lowest_mtbf, x='tag', y='MTBF_months',
                       title='Top 20 Equipments with Lowest MTBF (Months)',
                       labels={'MTBF_months': 'Mean Time Between Failures (Months)', 'tag': 'Equipment Tag'},
-                      template='plotly_white', color='familia', color_continuous_scale=px.colors.sequential.Viridis)
+                      template='plotly_white')
     fig_col8.update_layout(xaxis_title="Equipment Tag", yaxis_title="MTBF (Months)", title_x=0.5, coloraxis_showscale=False)
     col8.plotly_chart(fig_col8, use_container_width=True)
 

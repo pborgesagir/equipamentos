@@ -406,8 +406,8 @@ if authentication_status:
     
     # Plot for col7 - Vertical Bar Chart
     fig_col7 = px.bar(top10_familias_lowest_mtbf, x='familia', y='MTBF_months',
-                      title='Top 10 Familias with Lowest MTBF (Months)',
-                      labels={'MTBF_months': 'Mean Time Between Failures (Months)', 'familia': 'Familia'},
+                      title='Top 10 Familias de menor MTBF (Mês)',
+                      labels={'MTBF_months': 'MTBF (meses)', 'familia': 'Família'},
                       template='plotly_white')
     fig_col7.update_layout(xaxis_title="Familia", yaxis_title="Average MTBF (Months)", title_x=0.5)
     col7.plotly_chart(fig_col7, use_container_width=True)
@@ -419,8 +419,8 @@ if authentication_status:
     
     # Plot for col8 - Vertical Bar Chart
     fig_col8 = px.bar(top20_equipments_lowest_mtbf, x='tag', y='MTBF_months',
-                      title='Top 20 Equipments with Lowest MTBF (Months)',
-                      labels={'MTBF_months': 'Mean Time Between Failures (Months)', 'tag': 'Equipment Tag'},
+                      title='Top 20 Equipamentos de menor MTBF (Mês)',
+                      labels={'MTBF_months': 'MTBF (mês)', 'tag': 'Tag'},
                       template='plotly_white')
     fig_col8.update_layout(xaxis_title="Equipment Tag", yaxis_title="MTBF (Months)", title_x=0.5, coloraxis_showscale=False)
     col8.plotly_chart(fig_col8, use_container_width=True)

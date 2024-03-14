@@ -235,8 +235,8 @@ if authentication_status:
     # Group by 'Year-Month' and calculate the counts
     monthly_data = filtered_df.groupby('Year-Month').agg({'abertura':'count', 'fechamento':'count'}).reset_index()
     
-    # Calculate the percentage result
-    monthly_data['Resultado (%)'] = (monthly_data['fechamento'] / monthly_data['abertura']) * 100
+
+
     
     # Create the bar chart for opened and closed requests
     fig = go.Figure()
@@ -253,18 +253,7 @@ if authentication_status:
         marker_color='lightsalmon'
     ))
     
-    # Add the tendency line for the percentage result
-    fig.add_trace(go.Scatter(
-        x=monthly_data['Year-Month'],
-        y=monthly_data['Resultado (%)'],
-        name='Resultado (%)',
-        mode='lines+markers',
-        line=dict(color='green')
-    ))
     
-    # Add the goal line
-    fig.add_hline(y=85, line_dash="dot", annotation_text="Meta (85%)", 
-                  annotation_position="bottom right")
     
     # Set the title and labels
     fig.update_layout(

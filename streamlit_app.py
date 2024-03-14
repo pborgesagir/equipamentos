@@ -428,34 +428,38 @@ if authentication_status:
 
 
 
-    # Filter for 'CORRETIVA' in 'tipomanutencao'
+ # Filter for 'CORRETIVA' in 'tipomanutencao'
     corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
     
-    # Group by 'empresa' and 'setor', then count occurrences
-    corretiva_grouped = corretiva_df.groupby(['empresa', 'setor']).size().reset_index(name='count')
+    # Group by 'setor' and count occurrences
+    corretiva_grouped_by_setor = corretiva_df.groupby('setor').size().reset_index(name='count')
     
     # Sort the results by count, descending, to get the top occurrences
-    corretiva_grouped_sorted = corretiva_grouped.sort_values('count', ascending=False).head(10)
+    top_corretiva_setor = corretiva_grouped_by_setor.sort_values('count', ascending=False).head(20)
     
     # Plot the bar chart using Plotly
-    fig = px.bar(corretiva_grouped_sorted,
+    fig = px.bar(top_corretiva_setor,
                  x='count',
-                 y='empresa',
-                 color='setor',  # Color by 'setor' for differentiation
-                 title='Top 10 CORRETIVA por Empresa e Setor',
-                 labels={'count': 'Number of CORRETIVA', 'empresa': 'Empresa', 'setor': 'Setor'},
+                 y='setor',
+                 title='Top 20 CORRETIVA Maintenance by Setor',
+                 labels={'count': 'Number of CORRETIVA', 'setor': 'Setor'},
                  template='plotly_white',
+                 color='setor',  # Color by 'setor' for differentiation
                  height=600)  # Adjust height if necessary
     
     # Improve layout
     fig.update_layout(xaxis_title="Number of CORRETIVA",
-                      yaxis_title="Empresa",
+                      yaxis_title="Setor",
                       legend_title="Setor",
                       title_x=0.5,  # Center the chart title
                       yaxis={'categoryorder': 'total ascending'})  # Ensure the highest values are at the top
     
-    # Display the chart in col9 (assuming Streamlit or a similar framework for visualization)
-    col9.plotly_chart(fig, use_container_width=True)
+    # Display the chart
+    fig.show()
+    
+    # If you're using an environment like Streamlit, replace fig.show() with:
+    # col9.plotly_chart(fig, use_container_width=True)
+
 
 
 

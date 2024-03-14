@@ -43,9 +43,9 @@ with file_path.open("rb") as file:
     hashed_passwords = pickle.load(file)
 
 authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
-    "sales_dashboard", "abcdef", cookie_expiry_days=0.00694)
+    "sales_dashboard", "abcdef", cookie_expiry_days=1)
 
-name, authentication_status, username = authenticator.login("Login de acesso: Gestão de Recurso para Investimento - GCINFRA", "main")
+name, authentication_status, username = authenticator.login("Login de acesso: Gestão de Equipamentos - GCINFRA", "main")
 
 if authentication_status == False:
     st.error("Usuário/senha está incorreto")
@@ -73,7 +73,7 @@ if authentication_status:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # st.sidebar.image('index.png', width=150)
+    st.sidebar.image('index.png', width=150)
     st.sidebar.title(f"Bem-vindo, {name}")
     conn = st.connection("gsheets", type=GSheetsConnection)
     

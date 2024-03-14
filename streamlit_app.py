@@ -361,7 +361,7 @@ if authentication_status:
     fig.update_layout(xaxis_title="Familia",
                       yaxis_title="Average MTBF (Years)",
                       title_x=0.5,
-                      height=1200)  # Center the chart title
+                      height=800)  # Center the chart title
     
     # Display the chart in col5
     col5.plotly_chart(fig, use_container_width=True)

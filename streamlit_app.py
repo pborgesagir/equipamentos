@@ -358,8 +358,8 @@ if authentication_status:
                  template='plotly_white')
     
     # Enhance layout
-    fig.update_layout(xaxis_title="Familia",
-                      yaxis_title="Average MTBF (Years)",
+    fig.update_layout(xaxis_title="Família",
+                      yaxis_title="MTBF (anos)",
                       title_x=0.5,
                       height=800)  # Center the chart title
     
@@ -369,7 +369,7 @@ if authentication_status:
     # Plot the scatter plot for MTBF vs. Equipment Age colored by Familia
     fig = px.scatter(corretiva_with_age, x='equipment_age', y='MTBF', color='familia',
                      title='MTBF por família',
-                     labels={'equipment_age': 'Equipment Age (Years)', 'MTBF': 'Mean Time Between Failures (Years)'},
+                     labels={'equipment_age': 'Idade equipamento (anos)', 'MTBF': 'Tempo médio entre falhas (Anos)'},
                      hover_data=['tag'],  # Show equipment 'tag' on hover
                      template='plotly_white')
     

@@ -78,6 +78,7 @@ if authentication_status:
     conn = st.connection("gsheets", type=GSheetsConnection)
     
     df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(12)))
+    df = df.sort_values("cadastro")
     
     # Display the DataFrame in Streamlit
     st.dataframe(df)

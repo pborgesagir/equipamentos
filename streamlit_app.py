@@ -396,7 +396,7 @@ if authentication_status:
 
 
    # Convert MTBF from days to months
-    corretiva_with_age['MTBF_months'] = corretiva_with_age['MTBF'] / 30.44
+    corretiva_with_age['MTBF_months'] = corretiva_with_age['MTBF'] * 12
     
     # Top 10 Familias with the Lowest MTBF (in months)
     top10_familias_lowest_mtbf = corretiva_with_age.groupby('familia')['MTBF_months'].mean().reset_index()

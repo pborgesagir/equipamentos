@@ -233,7 +233,7 @@ if authentication_status:
     
     # Convert 'abertura' and 'fechamento' to datetime
     filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], format='%m/%d/%Y %H:%M:%S', errors='coerce')
-    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], format='%m/%d/%Y %H:%M:%S', errors='coerce')
+    
     
     # Drop rows where dates could not be parsed
     filtered_df = filtered_df.dropna(subset=['abertura', 'fechamento'])

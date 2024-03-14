@@ -479,6 +479,21 @@ if authentication_status:
 
 
 
+    # Assuming you have already displayed a chart above this code
+    # Now, add a field for user comments
+    user_comment = st.text_area("Leave a comment", "Type your comment here...")
+    
+    # To display the comment back to the user or save it, you can use the variable `user_comment`
+    # For example, to display the comment:
+    if user_comment:
+        st.write("Your comment:", user_comment)
+    
+    # You might want to save the comment to a database or file depending on your application's requirements
+
+
+
+
+
 
 
 

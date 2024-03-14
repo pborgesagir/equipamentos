@@ -378,6 +378,31 @@ if authentication_status:
     col6.plotly_chart(fig, use_container_width=True)
 
 
+        # Top 10 Familias with the Lowest MTBF
+    top10_familias_lowest_mtbf = corretiva_with_age.groupby('familia')['MTBF'].mean().reset_index()
+    top10_familias_lowest_mtbf = top10_familias_lowest_mtbf.sort_values('MTBF', ascending=True).head(10)
+    
+    # Plot for col7
+    fig_col7 = px.bar(top10_familias_lowest_mtbf, x='MTBF', y='familia', orientation='h',
+                      title='Top 10 Familias with Lowest MTBF',
+                      labels={'MTBF': 'Mean Time Between Failures (Days)', 'familia': 'Familia'},
+                      template='plotly_white')
+    fig_col7.update_layout(yaxis_title="Familia", xaxis_title="Average MTBF (Days)", title_x=0.5)
+    col7.plotly_chart(fig_col7, use_container_width=True)
+    
+    # Top 20 Equipments with the Lowest MTBF
+    top20_equipments_lowest_mtbf = corretiva_with_age.sort_values('MTBF', ascending=True).head(20)
+    
+    # Plot for col8
+    fig_col8 = px.bar(top20_equipments_lowest_mtbf, x='MTBF', y='tag', orientation='h',
+                      title='Top 20 Equipments with Lowest MTBF',
+                      labels={'MTBF': 'Mean Time Between Failures (Days)', 'tag': 'Equipment Tag'},
+                      template='plotly_white', color='familia', color_continuous_scale=px.colors.sequential.Viridis)
+    fig_col8.update_layout(yaxis_title="Equipment Tag", xaxis_title="MTBF (Days)", title_x=0.5, coloraxis_showscale=False)
+    col8.plotly_chart(fig_col8, use_container_width=True)
+
+
+
 
 
 

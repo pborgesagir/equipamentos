@@ -209,29 +209,33 @@ if authentication_status:
     col12 = st.columns(1)[0]
 
 
-    # Import necessary libraries (Plotly) - already imported in your provided code
-
-    # Count the occurrences of each 'tipomanutencao'
-    tipomanutencao_counts = filtered_df['tipomanutencao'].value_counts().reset_index()
-    tipomanutencao_counts.columns = ['tipomanutencao', 'count']
+    # Group by both 'tipomanutencao' and 'empresa', then count occurrences
+    grouped_tipomanutencao = filtered_df.groupby(['tipomanutencao', 'empresa']).size().reset_index(name='count')
     
-    # Create a horizontal bar chart
-    fig = px.bar(tipomanutencao_counts,
+    # Sort the results for better visualization
+    grouped_tipomanutencao = grouped_tipomanutencao.sort_values(['tipomanutencao', 'count'], ascending=True)
+    
+    # Create a horizontal bar chart grouped and colored by 'empresa'
+    fig = px.bar(grouped_tipomanutencao,
                  x='count',
                  y='tipomanutencao',
+                 color='empresa',  # This adds color based on the 'empresa' column
                  orientation='h',  # This makes the bar chart horizontal
-                 title='Apresentação de Serviços',
-                 labels={'count': 'Quantidade', 'tipomanutencao': 'Tipo de Manutenção'},
-                 template='plotly_white')  # Use a clean template
+                 title='Apresentação de Serviços por Empresa',
+                 labels={'count': 'Quantidade', 'tipomanutencao': 'Tipo de Manutenção', 'empresa': 'Empresa'},
+                 template='plotly_white',  # Use a clean template
+                 category_orders={"tipomanutencao": grouped_tipomanutencao['tipomanutencao'].unique()})  # Maintain the order of 'tipomanutencao'
     
     # Improve layout
     fig.update_layout(xaxis_title="Quantidade",
                       yaxis_title="Tipo de Manutenção",
                       yaxis={'categoryorder': 'total ascending'},  # Sort bars by count
+                      legend_title="Empresa",
                       title_x=0.5)  # Center the chart title
     
     # Display the chart in the specified column
     col1.plotly_chart(fig, use_container_width=True)
+
 
 
     

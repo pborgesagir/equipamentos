@@ -279,34 +279,38 @@ if authentication_status:
     col2.plotly_chart(fig, use_container_width=True)
 
 
-    # Step 1: Calculate the percentage of 'fechadas' over 'abertas'
-    monthly_data['Percentage'] = (monthly_data['fechamento'] / monthly_data['abertura']) * 100
+    # Calculate the total number of opened requests per month
+    # Assuming 'abertura' represents the 'opened' status in your data
+    opened_requests_per_month = filtered_df.groupby('Year-Month')['abertura'].count().reset_index()
+    opened_requests_per_month.columns = ['Year-Month', 'Opened']
     
-    # Step 2: Plot the line chart
-    fig2 = go.Figure()
+    # Calculate the total number of closed requests per month
+    # Assuming 'fechamento' represents the 'closed' status in your data
+    closed_requests_per_month = filtered_df.groupby('Year-Month')['fechamento'].count().reset_index()
+    closed_requests_per_month.columns = ['Year-Month', 'Closed']
     
-    # Line for monthly percentage
-    fig2.add_trace(go.Scatter(
-        x=monthly_data['Year-Month'], 
-        y=monthly_data['Percentage'], 
-        mode='lines+markers',
-        name='Feitas/Fechadas',
-        line=dict(color='royalblue', width=2)
-    ))
+    # Merge the two dataframes on 'Year-Month'
+    monthly_performance = pd.merge(opened_requests_per_month, closed_requests_per_month, on='Year-Month')
     
-    # Step 3: Add a horizontal line for the goal
-    fig2.add_hline(y=85, line_dash="dash", line_color="red", annotation_text="Meta 85%", 
-                   annotation_position="top right", line_width=2)
+    # Calculate the percentage of closed requests
+    monthly_performance['Closure Rate'] = (monthly_performance['Closed'] / monthly_performance['Opened']) * 100
     
-    # Improve layout
-    fig2.update_layout(title='Porcentagem de Manutenções Fechadas por Mês',
-                       xaxis_title='Mês',
-                       yaxis_title='Porcentagem Fechadas',
-                       yaxis=dict(range=[0, 100]),
-                       title_x=0.5)  # Center the chart title
+    # Plot the line chart
+    fig = px.line(monthly_performance, x='Year-Month', y='Closure Rate', title='Performance of Closure Rate Over Time')
+    
+    # Add a horizontal line for the goal (Meta) at 85%
+    fig.add_hline(y=85, line_dash="dash", line_color="red", annotation_text="Meta 85%", annotation_position="bottom right")
+    
+    # Enhance layout
+    fig.update_layout(xaxis_title="Year-Month",
+                      yaxis_title="Closure Rate (%)",
+                      yaxis=dict(tickformat=".0f"),  # Format y-axis tick labels as integers
+                      legend=dict(title="Legend"),
+                      title_x=0.5)  # Center the chart title
     
     # Display the chart
-    col3.plotly_chart(fig2, use_container_width=True)
+    col3.plotly_chart(fig, use_container_width=True)
+
 
 
 

@@ -22,7 +22,7 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 # Read data from a specific sheet named "METRICAS"
 # This line assumes `conn.read()` can accept a parameter to specify the sheet name, which is not explicitly stated in your example
 # If `conn.read()` does not support this, you would need to check the documentation for the correct method to specify a sheet name
-df = conn.read(spreadsheet=url, sheet_name="METRICAS", usecols=list(range(12)))
+df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(12)))
 
 # Display the DataFrame in Streamlit
 st.dataframe(df)

@@ -102,8 +102,8 @@ if authentication_status:
     # Create a "Year-Semester" column
     df["Year-Semester"] = df["Year"].astype(str) + "-S" + df["Semester"].astype(str)
     
-    # Assuming 'UNIDADE' and 'OS' are columns in your DataFrame for concatenation
-    # df["UNIDADE+OS"] = df["UNIDADE"] + '-' + df["OS"]
+    # Assuming 'empresa' and 'OS' are columns in your DataFrame for concatenation
+    # df["empresa+OS"] = df["empresa"] + '-' + df["OS"]
     
     # Sort the unique values in ascending order
     unique_year_month = sorted(df["Year-Month"].unique())
@@ -116,9 +116,41 @@ if authentication_status:
     unique_year_quarter.insert(0, "Todos")
     unique_year_semester.insert(0, "Todos")
     unique_year.insert(0, "Todos")
+
+
+    # Define the list of "empresa" values and add "Todos" as an option
+    desired_empresa = df["empresa"].unique().tolist()
+    desired_empresa.insert(0, "Todos")
+    
+    empresa = st.sidebar.multiselect("empresa", desired_empresa, default=desired_empresa[0])
+
+
+    # Define the list of "familia" values and add "Todos" as an option
+    desired_numero_familia = df["familia"].unique().tolist()
+    desired_numero_familia.insert(0, "Todos")
+    
+    # Create a filter for selecting "familia"
+    numero_familia = st.sidebar.multiselect("familia", desired_numero_familia, default=desired_numero_familia[0])
+
+    # Define the list of "tipomanutencao" values and add "Todos" as an option
+    desired_numero_tipomanutencao = df["tipomanutencao"].unique().tolist()
+    desired_numero_tipomanutencao.insert(0, "Todos")
+    
+    # Create a filter for selecting "tipomanutencao"
+    numero_tipomanutencao = st.sidebar.multiselect("tipomanutencao", desired_numero_tipomanutencao, default=desired_numero_tipomanutencao[0])
+
+
+    # Define the list of "setor" values and add "Todos" as an option
+    desired_numero_setor = df["setor"].unique().tolist()
+    desired_numero_setor.insert(0, "Todos")
+    
+    # Create a filter for selecting "setor"
+    numero_setor = st.sidebar.multiselect("setor", desired_numero_setor, default=desired_numero_setor[0])
+
+    
     
     # Create a sidebar for selecting filters (Assuming you're using Streamlit)
-    import streamlit as st
+   
     month = st.sidebar.selectbox("Mês", unique_year_month)
     quarter = st.sidebar.selectbox("Trimestre", unique_year_quarter)
     semester = st.sidebar.selectbox("Semestre", unique_year_semester)
@@ -144,6 +176,18 @@ if authentication_status:
         filtered_df = filtered_df
     else:
         filtered_df = filtered_df[filtered_df["Year"] == year]
+
+
+
+
+    if empresa and empresa != ["Todos"]:
+        filtered_df = filtered_df[filtered_df["empresa"].isin(empresa)]
+    
+    if numero_familia and numero_familia != ["Todos"]:
+        filtered_df = filtered_df[filtered_df["familia"].isin(numero_familia)]
+    
+    if numero_setor and numero_setor != ["Todos"]:
+        filtered_df = filtered_df[filtered_df["setor"].isin(numero_setor)]
 
 
     

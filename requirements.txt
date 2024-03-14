@@ -7,3 +7,6 @@ pandas
 plotly.express
 streamlit-authenticator==0.1.5 
 numpy
+streamlit_option_menu==0.3.2
+kaleido
+pygwalker

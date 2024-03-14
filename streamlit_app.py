@@ -196,7 +196,7 @@ if authentication_status:
     authenticator.logout("Logout", "sidebar")
     
     
-    
+    col10, col11 = st.columns(2)
     col1 = st.columns(1)[0]
     col2, col3 = st.columns(2)
     col4 = st.columns(1)[0]
@@ -205,8 +205,6 @@ if authentication_status:
     col7 = st.columns(1)[0]
     col8 = st.columns(1)[0]
     col9 = st.columns(1)[0]
-    col10 = st.columns(1)[0]
-    col11 = st.columns(1)[0]
     col12 = st.columns(1)[0]
 
 

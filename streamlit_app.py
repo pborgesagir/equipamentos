@@ -449,7 +449,7 @@ if authentication_status:
                  height=600)  # Adjust height if necessary
     
     # Improve layout
-    fig.update_layout(xaxis_title="Number of CORRETIVA",
+    fig.update_layout(xaxis_title="Quantidade",
                       yaxis_title="Setor",
                       legend_title="Setor",
                       title_x=0.5,  # Center the chart title

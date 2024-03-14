@@ -190,6 +190,17 @@ if authentication_status:
         filtered_df = filtered_df[filtered_df["setor"].isin(numero_setor)]
 
 
+    authenticator.logout("Logout", "sidebar")
+    
+    
+    
+    col1, col2, col10 = st.columns(3)
+    col3, col4 = st.columns(2)
+    col5, col6 = st.columns(2)
+    col7, col8 = st.columns(2)
+    col9, col11 = st.columns(2)
+
+
     
     
     # Display the DataFrame in Streamlit

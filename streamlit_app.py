@@ -279,47 +279,35 @@ if authentication_status:
     col2.plotly_chart(fig, use_container_width=True)
 
 
-    # Calculate the percentage of 'fechadas'/'abertas'
-    monthly_data['Percentage Closed'] = (monthly_data['fechamento'] / monthly_data['abertura']) * 100
+    # Step 1: Calculate the percentage of 'fechadas' over 'abertas'
+    monthly_data['Percentage'] = (monthly_data['fechamento'] / monthly_data['abertura']) * 100
     
-    # Prepare the data for the goal line (Meta)
-    goal_data = pd.DataFrame({
-        'Year-Month': monthly_data['Year-Month'],
-        'Goal': 85
-    })
+    # Step 2: Plot the line chart
+    fig2 = go.Figure()
     
-    # Create a line chart for the percentage closed over time
-    fig = go.Figure()
-    
-    # Add the trend line for the percentage closed
-    fig.add_trace(go.Scatter(
-        x=monthly_data['Year-Month'],
-        y=monthly_data['Percentage Closed'],
+    # Line for monthly percentage
+    fig2.add_trace(go.Scatter(
+        x=monthly_data['Year-Month'], 
+        y=monthly_data['Percentage'], 
         mode='lines+markers',
-        name='Percentage Closed',
-        marker=dict(color='RoyalBlue')
+        name='Feitas/Fechadas',
+        line=dict(color='royalblue', width=2)
     ))
     
-    # Add the goal line
-    fig.add_trace(go.Scatter(
-        x=goal_data['Year-Month'],
-        y=goal_data['Goal'],
-        mode='lines',
-        name='Goal (85%)',
-        line=dict(dash='dash', color='FireBrick')
-    ))
+    # Step 3: Add a horizontal line for the goal
+    fig2.add_hline(y=85, line_dash="dash", line_color="red", annotation_text="Meta 85%", 
+                   annotation_position="top right", line_width=2)
     
-    # Improve the layout
-    fig.update_layout(
-        title='Tendência de Fechamento de OS (%)',
-        xaxis_title='Mês',
-        yaxis_title='Percentual Fechado (%)',
-        legend_title='Legenda',
-        title_x=0.5
-    )
+    # Improve layout
+    fig2.update_layout(title='Porcentagem de Manutenções Fechadas por Mês',
+                       xaxis_title='Mês',
+                       yaxis_title='Porcentagem Fechadas',
+                       yaxis=dict(range=[0, 100]),
+                       title_x=0.5)  # Center the chart title
     
-    # Show the figure in the Streamlit app
-    col3.plotly_chart(fig, use_container_width=True)
+    # Display the chart
+    col3.plotly_chart(fig2, use_container_width=True)
+
 
 
 

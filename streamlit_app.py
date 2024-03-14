@@ -435,14 +435,14 @@ if authentication_status:
     corretiva_grouped = corretiva_df.groupby(['empresa', 'setor']).size().reset_index(name='count')
     
     # Sort the results by count, descending, to get the top occurrences
-    corretiva_grouped_sorted = corretiva_grouped.sort_values('count', ascending=False).head(20)
+    corretiva_grouped_sorted = corretiva_grouped.sort_values('count', ascending=False).head(10)
     
     # Plot the bar chart using Plotly
     fig = px.bar(corretiva_grouped_sorted,
                  x='count',
                  y='empresa',
                  color='setor',  # Color by 'setor' for differentiation
-                 title='Top 20 CORRETIVA by Empresa and Setor',
+                 title='Top 10 CORRETIVA por Empresa e Setor',
                  labels={'count': 'Number of CORRETIVA', 'empresa': 'Empresa', 'setor': 'Setor'},
                  template='plotly_white',
                  height=600)  # Adjust height if necessary

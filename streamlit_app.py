@@ -207,7 +207,14 @@ if authentication_status:
     col9 = st.columns(1)[0]
     col12 = st.columns(1)[0]
 
+    # Function to generate PDF
+    def create_pdf(comment):
+        buffer = BytesIO()
+        c = canvas.Canvas(buffer, pagesize=letter)
+        c.drawString(100,750, "Report Generated from Streamlit App")
+        c.drawString(100,730, f"User Comment: {comment}")
 
+    
     # Group by both 'tipomanutencao' and 'empresa', then count occurrences
     grouped_tipomanutencao = filtered_df.groupby(['tipomanutencao', 'empresa']).size().reset_index(name='count')
     
@@ -488,12 +495,7 @@ if authentication_status:
     if user_comment:
         st.write("Your comment:", user_comment)
     
-    # Function to generate PDF
-    def create_pdf(comment):
-        buffer = BytesIO()
-        c = canvas.Canvas(buffer, pagesize=letter)
-        c.drawString(100,750, "Report Generated from Streamlit App")
-        c.drawString(100,730, f"User Comment: {comment}")
+    
         # Here you can add more content to the PDF as needed
         c.showPage()
         c.save()

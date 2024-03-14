@@ -499,6 +499,13 @@ if authentication_status:
 
 
 
+    st.title("Customize a sua análise")
+
+            pyg_html = pyg.walk(df, return_html=True)
+            components.html(pyg_html, height=1000, scrolling=True)
+
+
+
 
 
 

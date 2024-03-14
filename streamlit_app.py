@@ -454,11 +454,10 @@ if authentication_status:
                       title_x=0.5,  # Center the chart title
                       yaxis={'categoryorder': 'total ascending'})  # Ensure the highest values are at the top
     
-    # Display the chart
-    fig.show()
+   
     
     # If you're using an environment like Streamlit, replace fig.show() with:
-    # col9.plotly_chart(fig, use_container_width=True)
+    col9.plotly_chart(fig, use_container_width=True)
 
 
 

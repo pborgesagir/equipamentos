@@ -231,60 +231,62 @@ if authentication_status:
 
 
     
-    # Convert 'abertura' and 'fechamento' to datetime
-    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], format='%m/%d/%Y %H:%M:%S', errors='coerce')
+    # Assuming 'abertura' is the number of opened requests and 'fechamento' is the number of closed requests
+    # Group by 'Year-Month' and calculate the counts
+    monthly_data = filtered_df.groupby('Year-Month').agg({'abertura':'count', 'fechamento':'count'}).reset_index()
     
+    # Calculate the percentage result
+    monthly_data['Resultado (%)'] = (monthly_data['fechamento'] / monthly_data['abertura']) * 100
     
-    # Drop rows where dates could not be parsed
-    filtered_df = filtered_df.dropna(subset=['abertura', 'fechamento'])
+    # Create the bar chart for opened and closed requests
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=monthly_data['Year-Month'],
+        y=monthly_data['abertura'],
+        name='Abertas',
+        marker_color='indianred'
+    ))
+    fig.add_trace(go.Bar(
+        x=monthly_data['Year-Month'],
+        y=monthly_data['fechamento'],
+        name='Fechadas',
+        marker_color='lightsalmon'
+    ))
     
-    # Group by month/year for 'abertura' and 'fechamento'
-    monthly_abertura = filtered_df.groupby(filtered_df['abertura'].dt.to_period('M')).size().rename('Abertas')
-    monthly_fechamento = filtered_df.groupby(filtered_df['fechamento'].dt.to_period('M')).size().rename('Fechadas')
+    # Add the tendency line for the percentage result
+    fig.add_trace(go.Scatter(
+        x=monthly_data['Year-Month'],
+        y=monthly_data['Resultado (%)'],
+        name='Resultado (%)',
+        mode='lines+markers',
+        line=dict(color='green')
+    ))
     
-    # Combine the counts into a single DataFrame and reset index
-    monthly_data = pd.concat([monthly_abertura, monthly_fechamento], axis=1).reset_index()
-    
-    # Convert 'abertura' from Period to string for plotting
-    monthly_data['abertura'] = monthly_data['abertura'].astype(str)
-    
-    # Calculate the percentage of 'fechamento' over 'abertura'
-    monthly_data['Resultado (%)'] = (monthly_data['Fechadas'] / monthly_data['Abertas']) * 100
-    
-    # Create the bar chart
-    fig = px.bar(monthly_data, x='abertura', y=['Abertas', 'Fechadas'],
-                 title='Atendimento de manutenções corretivas')
-    
-    # Add a trend line for the Resultado (%)
-    fig.add_traces(go.Scatter(x=monthly_data['abertura'], y=monthly_data['Resultado (%)'],
-                              mode='lines+markers', name='Resultado (%)',
-                              yaxis='y2'))
-    
-    # Add a horizontal line for the goal (meta = 85%)
-    fig.add_hline(y=85, line_dash="dot",
-                  annotation_text="Meta = 85%", 
+    # Add the goal line
+    fig.add_hline(y=85, line_dash="dot", annotation_text="Meta (85%)", 
                   annotation_position="bottom right")
     
-    # Set up the second y-axis for the percentage
+    # Set the title and labels
     fig.update_layout(
-        yaxis2=dict(
-            title='Resultado (%)',
-            overlaying='y',
-            side='right',
-            showgrid=False,  # Hide the gridlines for the second y-axis
-        ),
+        title='Atendimento de manutenções corretivas',
+        xaxis_tickfont_size=14,
         yaxis=dict(
-            title='Quantidade'
+            title='Número de OS',
+            titlefont_size=16,
+            tickfont_size=14,
         ),
-        xaxis=dict(
-            title='Mês'
-        )
+        legend=dict(
+            x=0,
+            y=1.0,
+            bgcolor='rgba(255, 255, 255, 0)',
+            bordercolor='rgba(255, 255, 255, 0)'
+        ),
+        barmode='group',
+        bargap=0.15, # gap between bars of adjacent location coordinates.
+        bargroupgap=0.1 # gap between bars of the same location coordinate.
     )
     
-    # Ensure the layout can expand in the space available
-    fig.update_layout(autosize=True)
-    
-    # Display the figure in the specified column (col2)
+    # Show the figure in the Streamlit app
     col2.plotly_chart(fig, use_container_width=True)
 
 

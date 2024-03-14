@@ -502,10 +502,10 @@ if authentication_status:
 
 
     # Calculate 'tempo de resolução' in days
-    df['tempo_de_resolucao'] = (df['fechamento'] - df['abertura']).dt.days
+    filtered_df['tempo_de_resolucao'] = (filtered_df['fechamento'] - filtered_df['abertura']).dt.days
     
     # Group by a period (e.g., by 'Year-Month') and calculate the mean 'tempo de resolução'
-    avg_resolucao_by_period = df.groupby('Year-Month')['tempo_de_resolucao'].mean().reset_index()
+    avg_resolucao_by_period = filtered_df.groupby('Year-Month')['tempo_de_resolucao'].mean().reset_index()
     
     # Plot the line chart using Plotly
     fig = px.line(avg_resolucao_by_period, x='Year-Month', y='tempo_de_resolucao',

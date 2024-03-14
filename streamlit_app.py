@@ -443,7 +443,7 @@ if authentication_status:
     fig = px.bar(top_corretiva_setor,
                  x='count',
                  y='setor',
-                 title='Top 20 CORRETIVA Maintenance by Setor',
+                 title='Top 20 com mais CORRETIVAS por Setor',
                  labels={'count': 'Number of CORRETIVA', 'setor': 'Setor'},
                  template='plotly_white',
                  height=600)  # Adjust height if necessary

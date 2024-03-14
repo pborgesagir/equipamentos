@@ -230,58 +230,63 @@ if authentication_status:
     col1.plotly_chart(fig, use_container_width=True)
 
 
-
-        # Ensure both 'abertura' and 'fechamento' are in datetime format
-    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
-    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
+    
+    # Convert 'abertura' and 'fechamento' to datetime
+    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], format='%m/%d/%Y %H:%M:%S', errors='coerce')
+    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], format='%m/%d/%Y %H:%M:%S', errors='coerce')
     
     # Drop rows where dates could not be parsed
     filtered_df = filtered_df.dropna(subset=['abertura', 'fechamento'])
     
-    # Now group by month
+    # Group by month/year for 'abertura' and 'fechamento'
     monthly_abertura = filtered_df.groupby(filtered_df['abertura'].dt.to_period('M')).size().rename('Abertas')
     monthly_fechamento = filtered_df.groupby(filtered_df['fechamento'].dt.to_period('M')).size().rename('Fechadas')
-
     
-    # Combine the counts into a single DataFrame
-    monthly_data = pd.concat([monthly_abertura, monthly_fechamento], axis=1)
+    # Combine the counts into a single DataFrame and reset index
+    monthly_data = pd.concat([monthly_abertura, monthly_fechamento], axis=1).reset_index()
     
-    # Calculate the percentage of "fechamento" over "abertura"
+    # Convert 'abertura' from Period to string for plotting
+    monthly_data['abertura'] = monthly_data['abertura'].astype(str)
+    
+    # Calculate the percentage of 'fechamento' over 'abertura'
     monthly_data['Resultado (%)'] = (monthly_data['Fechadas'] / monthly_data['Abertas']) * 100
     
-    # Reset the index to turn it into a column for plotting
-    monthly_data = monthly_data.reset_index()
-
-
-
-    # Create a bar chart for "abertura" and "fechamento" by month
+    # Create the bar chart
     fig = px.bar(monthly_data, x='abertura', y=['Abertas', 'Fechadas'],
                  title='Atendimento de manutenções corretivas')
     
-    # Add a trend line for the percentage
+    # Add a trend line for the Resultado (%)
     fig.add_traces(go.Scatter(x=monthly_data['abertura'], y=monthly_data['Resultado (%)'],
                               mode='lines+markers', name='Resultado (%)',
                               yaxis='y2'))
+    
+    # Add a horizontal line for the goal (meta = 85%)
+    fig.add_hline(y=85, line_dash="dot",
+                  annotation_text="Meta = 85%", 
+                  annotation_position="bottom right")
     
     # Set up the second y-axis for the percentage
     fig.update_layout(
         yaxis2=dict(
             title='Resultado (%)',
             overlaying='y',
-            side='right'
+            side='right',
+            showgrid=False,  # Hide the gridlines for the second y-axis
         ),
         yaxis=dict(
             title='Quantidade'
+        ),
+        xaxis=dict(
+            title='Mês'
         )
     )
     
-    # Add a horizontal line for the goal ("meta")
-    fig.add_hline(y=85, line_dash="dot",
-                  annotation_text="Meta = 85%",
-                  annotation_position="bottom right")
+    # Ensure the layout can expand in the space available
+    fig.update_layout(autosize=True)
     
-    # Plot the figure in the specified column
+    # Display the figure in the specified column (col2)
     col2.plotly_chart(fig, use_container_width=True)
+
 
 
 

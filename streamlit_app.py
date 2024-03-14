@@ -313,11 +313,6 @@ if authentication_status:
 
 
 
-    
-   
-    
-    
-
     # Ensure 'cadastro' and 'instalacao' are in datetime format
     filtered_df['cadastro'] = pd.to_datetime(filtered_df['cadastro'], errors='coerce')
     filtered_df['instalacao'] = pd.to_datetime(filtered_df['instalacao'], errors='coerce')
@@ -325,9 +320,10 @@ if authentication_status:
     # Determine the oldest date between 'cadastro' and 'instalacao' for each equipment
     filtered_df['oldest_date'] = filtered_df[['cadastro', 'instalacao']].min(axis=1)
     
-    # Calculate the age of the equipment in days (or in your preferred time unit)
-    filtered_df['equipment_age'] = (datetime.now() - filtered_df['oldest_date']).dt.days
-    
+    # Calculate the age of the equipment in years
+    filtered_df['equipment_age'] = ((datetime.now() - filtered_df['oldest_date']) / np.timedelta64(1, 'Y')).astype(float)
+
+
     # Filter for 'CORRETIVA' in 'tipomanutencao'
     corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
     
@@ -337,7 +333,7 @@ if authentication_status:
     # Merge back to get ages and families for each tag
     corretiva_with_age = pd.merge(corretiva_count, filtered_df[['tag', 'equipment_age', 'familia']].drop_duplicates(), on='tag')
     
-    # Calculate MTBF (assuming corretiva_count > 0 to avoid division by zero)
+    # Calculate MTBF in years (assuming corretiva_count > 0 to avoid division by zero)
     corretiva_with_age['MTBF'] = corretiva_with_age['equipment_age'] / corretiva_with_age['corretiva_count']
     
     # Calculate the average MTBF for each 'familia'
@@ -349,33 +345,45 @@ if authentication_status:
     # Plot the bar chart for average MTBF per familia
     fig = px.bar(avg_mtbf_per_familia, x='familia', y='MTBF',
                  title='Average MTBF per Familia',
-                 labels={'MTBF': 'Average MTBF', 'familia': 'Familia'},
+                 labels={'MTBF': 'Average MTBF (Years)', 'familia': 'Familia'},
                  template='plotly_white')
     
     # Enhance layout
     fig.update_layout(xaxis_title="Familia",
-                      yaxis_title="Average MTBF",
+                      yaxis_title="Average MTBF (Years)",
                       title_x=0.5)  # Center the chart title
     
     # Display the chart in col5
     col5.plotly_chart(fig, use_container_width=True)
-
-
+    
     # Plot the scatter plot for MTBF vs. Equipment Age colored by Familia
     fig = px.scatter(corretiva_with_age, x='equipment_age', y='MTBF', color='familia',
                      title='MTBF vs. Equipment Age by Familia',
-                     labels={'equipment_age': 'Equipment Age (Days)', 'MTBF': 'Mean Time Between Failures (Days)'},
+                     labels={'equipment_age': 'Equipment Age (Years)', 'MTBF': 'Mean Time Between Failures (Years)'},
                      hover_data=['tag'],  # Show equipment 'tag' on hover
                      template='plotly_white')
     
     # Enhance layout
-    fig.update_layout(xaxis_title="Equipment Age (Days)",
-                      yaxis_title="MTBF (Days)",
+    fig.update_layout(xaxis_title="Equipment Age (Years)",
+                      yaxis_title="MTBF (Years)",
                       legend_title="Familia",
                       title_x=0.5)  # Center the chart title
     
     # Display the chart in col6
     col6.plotly_chart(fig, use_container_width=True)
+
+
+   
+    
+    
+
+
+
+
+
+
+
+    
 
 
    # Convert MTBF from days to months

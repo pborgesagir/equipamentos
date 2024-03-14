@@ -14,14 +14,25 @@ st.set_page_config(
 
 # Google Sheets URL
 url = "https://docs.google.com/spreadsheets/d/1GswNpQuhhc6udp59clV5s6dDnBfFF91rofaRbMsDdT0/edit#gid=704841034"
-st.title("EQUIPAMENTOS - Engenharia Clínica")
+# Centered title using HTML tags
+st.markdown("<h1 style='text-align: center;'>GESTÃO DE RECURSO PARA INVESTIMENTO</h1>", unsafe_allow_html=True)
 
-# Establish connection using Streamlit's GSheetsConnection
+
+# Adding a centered subtitle with larger font size using HTML
+st.markdown("""
+    <div style='text-align: center; font-size: 36px;'>
+        <b>SOF - DCOL - GCINFRA</b>
+    </div>
+""", unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
+
+st.sidebar.image('index.png', width=150)
+st.sidebar.title(f"Bem-vindo, {name}")
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# Read data from a specific sheet named "METRICAS"
-# This line assumes `conn.read()` can accept a parameter to specify the sheet name, which is not explicitly stated in your example
-# If `conn.read()` does not support this, you would need to check the documentation for the correct method to specify a sheet name
 df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(12)))
 
 # Display the DataFrame in Streamlit

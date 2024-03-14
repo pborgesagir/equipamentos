@@ -203,6 +203,10 @@ if authentication_status:
     col6 = st.columns(1)[0]
     col7 = st.columns(1)[0]
     col8 = st.columns(1)[0]
+    col9 = st.columns(1)[0]
+    col10 = st.columns(1)[0]
+    col11 = st.columns(1)[0]
+    col12 = st.columns(1)[0]
 
 
     # Import necessary libraries (Plotly) - already imported in your provided code

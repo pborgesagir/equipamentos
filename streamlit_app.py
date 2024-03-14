@@ -79,6 +79,74 @@ if authentication_status:
     
     df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(12)))
     df = df.sort_values("cadastro")
+
+
+    # Convert the "cadastro" column to datetime with errors='coerce'
+    df["cadastro"] = pd.to_datetime(df["cadastro"], format='%m/%d/%Y %H:%M:%S', errors='coerce')
+    
+    # Filter out rows where the date could not be parsed (NaT)
+    df = df.dropna(subset=["cadastro"])
+    
+    # Extract year, month, and quarter
+    df["Year"] = df["cadastro"].dt.year
+    df["Month"] = df["cadastro"].dt.month
+    df["Quarter"] = df["cadastro"].dt.quarter
+    df["Semester"] = np.where(df["cadastro"].dt.month.isin([1, 2, 3, 4, 5, 6]), 1, 2)
+    
+    # Create a "Year-Quarter" column
+    df["Year-Quarter"] = df["Year"].astype(str) + "-Q" + df["Quarter"].astype(str)
+    
+    # If you want to create a "Year-Month" column, you can use the following line
+    df["Year-Month"] = df["cadastro"].dt.strftime("%Y-%m")
+    
+    # Create a "Year-Semester" column
+    df["Year-Semester"] = df["Year"].astype(str) + "-S" + df["Semester"].astype(str)
+    
+    # Assuming 'UNIDADE' and 'OS' are columns in your DataFrame for concatenation
+    df["UNIDADE+OS"] = df["UNIDADE"] + '-' + df["OS"]
+    
+    # Sort the unique values in ascending order
+    unique_year_month = sorted(df["Year-Month"].unique())
+    unique_year_quarter = sorted(df["Year-Quarter"].unique())
+    unique_year_semester = sorted(df["Year-Semester"].unique())
+    unique_year = sorted(df["Year"].unique())
+    
+    # Add "All" as an option for both filters
+    unique_year_month.insert(0, "Todos")
+    unique_year_quarter.insert(0, "Todos")
+    unique_year_semester.insert(0, "Todos")
+    unique_year.insert(0, "Todos")
+    
+    # Create a sidebar for selecting filters (Assuming you're using Streamlit)
+    import streamlit as st
+    month = st.sidebar.selectbox("Mês", unique_year_month)
+    quarter = st.sidebar.selectbox("Trimestre", unique_year_quarter)
+    semester = st.sidebar.selectbox("Semestre", unique_year_semester)
+    year = st.sidebar.selectbox("Ano", unique_year)
+    
+    # Filter the DataFrame based on the selections
+    if month == "Todos":
+        month_filtered = df
+    else:
+        month_filtered = df[df["Year-Month"] == month]
+    
+    if quarter == "Todos":
+        filtered_df = month_filtered
+    else:
+        filtered_df = month_filtered[month_filtered["Year-Quarter"] == quarter]
+    
+    if semester == "Todos":
+        filtered_df = filtered_df
+    else:
+        filtered_df = filtered_df[filtered_df["Year-Semester"] == semester]
+    
+    if year == "Todos":
+        filtered_df = filtered_df
+    else:
+        filtered_df = filtered_df[filtered_df["Year"] == year]
+
+
+    
     
     # Display the DataFrame in Streamlit
     st.dataframe(df)

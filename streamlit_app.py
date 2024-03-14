@@ -404,15 +404,16 @@ if authentication_status:
     # Now sort and select the top 20 equipments with the lowest MTBF
     top20_equipments_lowest_mtbf = corretiva_with_age.sort_values('MTBF_months', ascending=True).head(20)
     
-    # Plot using the new 'tag_equipamento' column
-    fig_col8 = px.bar(top20_equipments_lowest_mtbf, x='tag_equipamento', y='MTBF_months',
+    # Assuming 'corretiva_with_age' is your DataFrame and it contains a column named 'equipamento'
+
+    # Plot for col8 - Vertical Bar Chart using 'equipamento' instead of 'tag'
+    fig_col8 = px.bar(top20_equipments_lowest_mtbf, x='equipamento', y='MTBF_months',
                       title='Top 20 Equipments with Lowest MTBF (Months)',
-                      labels={'MTBF_months': 'Mean Time Between Failures (Months)', 'tag_equipamento': 'Equipment Tag - Name'},
+                      labels={'MTBF_months': 'Mean Time Between Failures (Months)', 'equipamento': 'Equipment'},
                       template='plotly_white')
-    fig_col8.update_layout(xaxis_title="Equipment Tag - Name", yaxis_title="MTBF (Months)", title_x=0.5, coloraxis_showscale=False)
-    
-    # Assuming 'col8' is a column in a Streamlit app
+    fig_col8.update_layout(xaxis_title="Equipment", yaxis_title="MTBF (Months)", title_x=0.5, coloraxis_showscale=False)
     col8.plotly_chart(fig_col8, use_container_width=True)
+
 
 
 

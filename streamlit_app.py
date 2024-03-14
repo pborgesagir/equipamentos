@@ -491,18 +491,7 @@ if authentication_status:
         st.write("Your comment:", user_comment)
     
     
-        # Here you can add more content to the PDF as needed
-        c.showPage()
-        c.save()
-        buffer.seek(0)
-        return buffer
-    
-    # Function to create a download link for the PDF
-    def create_download_link(pdf_buffer, filename):
-        b64 = base64.b64encode(pdf_buffer.read()).decode()
-        href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download PDF Report</a>'
-        return href
-    
+
     # Generate and download PDF
     if st.button("Generate and Download PDF"):
         pdf_buffer = create_pdf(user_comment)

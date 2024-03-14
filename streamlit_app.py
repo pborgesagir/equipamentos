@@ -60,13 +60,13 @@ if authentication_status:
     # Google Sheets URL
     url = "https://docs.google.com/spreadsheets/d/1GswNpQuhhc6udp59clV5s6dDnBfFF91rofaRbMsDdT0/edit#gid=704841034"
     # Centered title using HTML tags
-    st.markdown("<h1 style='text-align: center;'>EQUIPAMENTOS -  Engenharia Clínica</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>GESTÃO DE EQUIPAMENTOS</h1>", unsafe_allow_html=True)
     
     
     # Adding a centered subtitle with larger font size using HTML
     st.markdown("""
         <div style='text-align: center; font-size: 36px;'>
-            <b>SOF - DCOL - GCINFRA</b>
+            <b>ENGENHARIA CLÍNICA</b>
         </div>
     """, unsafe_allow_html=True)
     

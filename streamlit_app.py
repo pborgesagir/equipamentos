@@ -446,7 +446,7 @@ if authentication_status:
     corretiva_grouped = corretiva_df.groupby(['empresa', 'setor']).size().reset_index(name='count')
     
     # Sort the results for better visualization, if needed
-    corretiva_grouped = corretiva_grouped.sort_values(['empresa', 'count'], ascending=[False, False])
+    corretiva_grouped = corretiva_grouped.sort_values(['empresa', 'count'], ascending=[False, True])
     
     # Use Plotly to create a table for display
     fig = go.Figure(data=[go.Table(

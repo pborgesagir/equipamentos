@@ -203,6 +203,33 @@ if authentication_status:
     col7 = st.columns(1)[0]
 
 
+    # Import necessary libraries (Plotly) - already imported in your provided code
+
+    # Count the occurrences of each 'tipomanutencao'
+    tipomanutencao_counts = filtered_df['tipomanutencao'].value_counts().reset_index()
+    tipomanutencao_counts.columns = ['tipomanutencao', 'count']
+    
+    # Create a horizontal bar chart
+    fig = px.bar(tipomanutencao_counts,
+                 x='count',
+                 y='tipomanutencao',
+                 orientation='h',  # This makes the bar chart horizontal
+                 title='Quantidade por Tipo de Manutenção',
+                 labels={'count': 'Quantidade', 'tipomanutencao': 'Tipo de Manutenção'},
+                 color='tipomanutencao',  # Color bars by 'tipomanutencao'
+                 template='plotly_white')  # Use a clean template
+    
+    # Improve layout
+    fig.update_layout(xaxis_title="Quantidade",
+                      yaxis_title="Tipo de Manutenção",
+                      yaxis={'categoryorder': 'total ascending'},  # Sort bars by count
+                      title_x=0.5)  # Center the chart title
+    
+    # Display the chart in the specified column
+    col1.plotly_chart(fig, use_container_width=True)
+
+
+
     
     
     # Display the DataFrame in Streamlit

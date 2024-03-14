@@ -3,3 +3,7 @@ matplotlib
 plotly
 reportlab
 st-gsheets-connection
+pandas
+plotly.express
+streamlit-authenticator==0.1.5 
+numpy

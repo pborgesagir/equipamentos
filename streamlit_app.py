@@ -483,12 +483,12 @@ if authentication_status:
 
     # Assuming you have already displayed a chart above this code
     # Now, add a field for user comments
-    user_comment = st.text_area("Leave a comment", "Type your comment here...")
+    user_comment = st.text_area("Deixe uma análise", "Digite sua análise aqui...")
     
     # To display the comment back to the user or save it, you can use the variable `user_comment`
     # For example, to display the comment:
     if user_comment:
-        st.write("Your comment:", user_comment)
+        st.write("Sua análise:", user_comment)
     
     
 
@@ -497,6 +497,29 @@ if authentication_status:
         pdf_buffer = create_pdf(user_comment)
         st.markdown(create_download_link(pdf_buffer, "streamlit_report.pdf"), unsafe_allow_html=True)
 
+
+
+
+
+    # Calculate 'tempo de resolução' in days
+    df['tempo_de_resolucao'] = (df['fechamento'] - df['abertura']).dt.days
+    
+    # Group by a period (e.g., by 'Year-Month') and calculate the mean 'tempo de resolução'
+    avg_resolucao_by_period = df.groupby('Year-Month')['tempo_de_resolucao'].mean().reset_index()
+    
+    # Plot the line chart using Plotly
+    fig = px.line(avg_resolucao_by_period, x='Year-Month', y='tempo_de_resolucao',
+                  title='Tempo Médio de Resolução por Mês',
+                  labels={'tempo_de_resolucao': 'Tempo Médio de Resolução (Dias)', 'Year-Month': 'Período'},
+                  markers=True)  # Adding markers makes it easier to see individual data points
+    
+    # Enhance layout
+    fig.update_layout(xaxis_title="Período",
+                      yaxis_title="Tempo Médio de Resolução (Dias)",
+                      title_x=0.5)  # Center the chart title
+    
+    # Display the chart in col12
+    col12.plotly_chart(fig, use_container_width=True)
 
 
     st.title("Customize a sua análise")

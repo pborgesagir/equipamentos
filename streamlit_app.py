@@ -361,6 +361,24 @@ if authentication_status:
     col5.plotly_chart(fig, use_container_width=True)
 
 
+    # Plot the scatter plot for MTBF vs. Equipment Age colored by Familia
+    fig = px.scatter(corretiva_with_age, x='equipment_age', y='MTBF', color='familia',
+                     title='MTBF vs. Equipment Age by Familia',
+                     labels={'equipment_age': 'Equipment Age (Days)', 'MTBF': 'Mean Time Between Failures (Days)'},
+                     hover_data=['tag'],  # Show equipment 'tag' on hover
+                     template='plotly_white')
+    
+    # Enhance layout
+    fig.update_layout(xaxis_title="Equipment Age (Days)",
+                      yaxis_title="MTBF (Days)",
+                      legend_title="Familia",
+                      title_x=0.5)  # Center the chart title
+    
+    # Display the chart in col6
+    col6.plotly_chart(fig, use_container_width=True)
+
+
+
 
 
 

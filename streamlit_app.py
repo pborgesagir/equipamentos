@@ -469,7 +469,7 @@ if authentication_status:
     # Format the average MTBF to display with two decimal places
     formatted_avg_mtbf = "{:.2f} anos".format(avg_mtbf)
     col10.subheader('MTBF 🕒')
-    col10.metric(label='', value=formatted_avg_mtbf, delta=None)
+    col10.metric(label='Tempo médio entre falhas', value=formatted_avg_mtbf, delta=None)
     
     
     

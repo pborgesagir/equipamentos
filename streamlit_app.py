@@ -469,14 +469,14 @@ if authentication_status:
     # Format the average MTBF to display with two decimal places
     formatted_avg_mtbf = "{:.2f} anos".format(avg_mtbf)
     col10.subheader('MTBF 🕒')
-    col10.metric(label='Tempo médio entre falhas', value=formatted_avg_mtbf, delta=None)
+    col10.metric(label='Tempo Médio Entre Falhas', value=formatted_avg_mtbf, delta=None)
     
     
     
     # Count the occurrences of "CORRETIVA"
     num_corretivas = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].shape[0]
-    col11.subheader('Quantidade de CORRETIVAS 🛠️')
-    col11.metric(label='', value=num_corretivas, delta=None)
+    col11.subheader('CORRETIVAS 🛠️')
+    col11.metric(label='Quantidade total', value=num_corretivas, delta=None)
 
 
 
@@ -544,7 +544,7 @@ if authentication_status:
     
     # Display the Razão de Manutenção Preventiva para Corretiva in col13
     col13.subheader('Razão PM/CM 🔄')
-    col13.metric(label='', value=formatted_razao_pm_cm, delta=None)
+    col13.metric(label='Preventivas/Corretivas', value=formatted_razao_pm_cm, delta=None)
 
 
 

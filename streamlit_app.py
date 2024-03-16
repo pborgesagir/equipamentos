@@ -197,6 +197,7 @@ if authentication_status:
     
     
     col10, col11, col13 = st.columns(3)
+    col14, col15 = st.columns(2)
     col1 = st.columns(1)[0]
     col2, col3 = st.columns(2)
     col4 = st.columns(1)[0]
@@ -545,6 +546,28 @@ if authentication_status:
     # Display the Razão de Manutenção Preventiva para Corretiva in col13
     col13.subheader('Razão PM/CM 🔄')
     col13.metric(label='Preventivas/Corretivas', value=formatted_razao_pm_cm, delta=None)
+
+
+    
+    # MTBF by UNIDADE Calculation
+    # Filter 'CORRETIVA' maintenances
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    # Calculate MTBF for each 'empresa' (UNIDADE)
+    mtbf_by_unidade = corretiva_df.groupby('empresa').apply(lambda x: x['equipment_age'].sum() / len(x) if len(x) > 0 else 0).reset_index(name='MTBF')
+    # Plotting MTBF by UNIDADE in col14
+    fig_mtbf_by_unidade = px.bar(mtbf_by_unidade, x='empresa', y='MTBF', title='MTBF por Unidade', labels={'empresa': 'Unidade', 'MTBF': 'MTBF (anos)'})
+    col14.plotly_chart(fig_mtbf_by_unidade, use_container_width=True)
+    
+    # PM/CM Ratio by UNIDADE Calculation
+    # Count 'PREVENTIVA' and 'CORRETIVA' for each 'empresa' (UNIDADE)
+    pm_cm_count_by_unidade = filtered_df.groupby(['empresa', 'tipomanutencao']).size().unstack(fill_value=0)
+    # Calculate PM/CM ratio for each 'empresa' (UNIDADE)
+    pm_cm_count_by_unidade['PM/CM'] = pm_cm_count_by_unidade['PREVENTIVA'] / pm_cm_count_by_unidade['CORRETIVA'].replace(0, np.inf) # Replace 0 with 'inf' to avoid division by zero
+    pm_cm_ratio_by_unidade = pm_cm_count_by_unidade.reset_index()[['empresa', 'PM/CM']]
+    # Plotting PM/CM Ratio by UNIDADE in col15
+    fig_pm_cm_by_unidade = px.bar(pm_cm_ratio_by_unidade, x='empresa', y='PM/CM', title='Razão PM/CM por Unidade', labels={'empresa': 'Unidade', 'PM/CM': 'Razão PM/CM'})
+    col15.plotly_chart(fig_pm_cm_by_unidade, use_container_width=True)
+
 
 
 

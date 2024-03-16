@@ -550,23 +550,27 @@ if authentication_status:
 
     
     # MTBF by UNIDADE Calculation
-    # Filter 'CORRETIVA' maintenances
     corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
-    # Calculate MTBF for each 'empresa' (UNIDADE)
     mtbf_by_unidade = corretiva_df.groupby('empresa').apply(lambda x: x['equipment_age'].sum() / len(x) if len(x) > 0 else 0).reset_index(name='MTBF')
-    # Plotting MTBF by UNIDADE in col14
-    fig_mtbf_by_unidade = px.bar(mtbf_by_unidade, x='empresa', y='MTBF', title='MTBF por Unidade', labels={'empresa': 'Unidade', 'MTBF': 'MTBF (anos)'})
-    col14.plotly_chart(fig_mtbf_by_unidade, use_container_width=True)
+    
+    # Sort MTBF by UNIDADE in descending order of MTBF before plotting
+    mtbf_by_unidade_sorted = mtbf_by_unidade.sort_values('MTBF', ascending=False)
+    
+    # Plotting MTBF by UNIDADE in col14 with descending MTBF values
+    fig_mtbf_by_unidade_desc = px.bar(mtbf_by_unidade_sorted, x='empresa', y='MTBF', title='MTBF por Unidade (Desc)', labels={'empresa': 'Unidade', 'MTBF': 'MTBF (anos)'})
+    col14.plotly_chart(fig_mtbf_by_unidade_desc, use_container_width=True)
     
     # PM/CM Ratio by UNIDADE Calculation
-    # Count 'PREVENTIVA' and 'CORRETIVA' for each 'empresa' (UNIDADE)
     pm_cm_count_by_unidade = filtered_df.groupby(['empresa', 'tipomanutencao']).size().unstack(fill_value=0)
-    # Calculate PM/CM ratio for each 'empresa' (UNIDADE)
     pm_cm_count_by_unidade['PM/CM'] = pm_cm_count_by_unidade['PREVENTIVA'] / pm_cm_count_by_unidade['CORRETIVA'].replace(0, np.inf) # Replace 0 with 'inf' to avoid division by zero
     pm_cm_ratio_by_unidade = pm_cm_count_by_unidade.reset_index()[['empresa', 'PM/CM']]
-    # Plotting PM/CM Ratio by UNIDADE in col15
-    fig_pm_cm_by_unidade = px.bar(pm_cm_ratio_by_unidade, x='empresa', y='PM/CM', title='Razão PM/CM por Unidade', labels={'empresa': 'Unidade', 'PM/CM': 'Razão PM/CM'})
-    col15.plotly_chart(fig_pm_cm_by_unidade, use_container_width=True)
+    
+    # Sort PM/CM Ratio by UNIDADE in descending order of PM/CM ratio before plotting
+    pm_cm_ratio_by_unidade_sorted = pm_cm_ratio_by_unidade.sort_values('PM/CM', ascending=False)
+    
+    # Plotting PM/CM Ratio by UNIDADE in col15 with descending PM/CM ratio values
+    fig_pm_cm_by_unidade_desc = px.bar(pm_cm_ratio_by_unidade_sorted, x='empresa', y='PM/CM', title='Razão PM/CM por Unidade (Desc)', labels={'empresa': 'Unidade', 'PM/CM': 'Razão PM/CM'})
+    col15.plotly_chart(fig_pm_cm_by_unidade_desc, use_container_width=True)
 
 
 

@@ -196,7 +196,7 @@ if authentication_status:
     authenticator.logout("Logout", "sidebar")
     
     
-    col10, col11 = st.columns(2)
+    col10, col11, col13 = st.columns(3)
     col1 = st.columns(1)[0]
     col2, col3 = st.columns(2)
     col4 = st.columns(1)[0]
@@ -527,6 +527,25 @@ if authentication_status:
     
     # Display the chart in col12
     col12.plotly_chart(fig, use_container_width=True)
+
+
+        # Count the number of "PREVENTIVA"
+    num_preventivas = filtered_df[filtered_df['tipomanutencao'] == 'PREVENTIVA'].shape[0]
+    
+    # Count the number of "CORRETIVA"
+    num_corretivas = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].shape[0]
+    
+    # Calculate the Razão de Manutenção Preventiva para Corretiva (PM/CM)
+    # Make sure to handle division by zero if there are no "CORRETIVA" records
+    razao_pm_cm = num_preventivas / num_corretivas if num_corretivas > 0 else 0
+    
+    # Format the Razão de Manutenção Preventiva para Corretiva for display
+    formatted_razao_pm_cm = "{:.2f}".format(razao_pm_cm)
+    
+    # Display the Razão de Manutenção Preventiva para Corretiva in col13
+    col13.subheader('Razão PM/CM 🔄')
+    col13.metric(label='', value=formatted_razao_pm_cm, delta=None)
+
 
 
 

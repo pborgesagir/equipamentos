@@ -578,44 +578,44 @@ if authentication_status:
 
 
 
-    # Step 1: Calculate MTBF for each "familia"
-    # First, ensure 'equipment_age' is correctly calculated
-    filtered_df['equipment_age'] = ((pd.to_datetime('now') - pd.to_datetime(filtered_df['oldest_date'])) / np.timedelta64(1, 'Y')).astype(float)
+    # # Step 1: Calculate MTBF for each "familia"
+    # # First, ensure 'equipment_age' is correctly calculated
+    # filtered_df['equipment_age'] = ((pd.to_datetime('now') - pd.to_datetime(filtered_df['oldest_date'])) / np.timedelta64(1, 'Y')).astype(float)
     
-    # Filter rows for "CORRETIVA" and count occurrences by "familia"
-    corretiva_counts = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].groupby('familia').size()
+    # # Filter rows for "CORRETIVA" and count occurrences by "familia"
+    # corretiva_counts = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].groupby('familia').size()
     
-    # Calculate MTBF
-    filtered_df['MTBF'] = filtered_df.apply(lambda row: row['equipment_age'] / corretiva_counts.get(row['familia'], np.nan), axis=1)
+    # # Calculate MTBF
+    # filtered_df['MTBF'] = filtered_df.apply(lambda row: row['equipment_age'] / corretiva_counts.get(row['familia'], np.nan), axis=1)
     
-    # Step 2: Calculate PM/CM ratio for each "familia"
-    maintenance_counts = filtered_df.groupby(['familia', 'tipomanutencao']).size().unstack(fill_value=0)
-    maintenance_counts['PM/CM'] = maintenance_counts['PREVENTIVA'] / maintenance_counts['CORRETIVA'].replace(0, np.nan)  # Avoid division by zero
+    # # Step 2: Calculate PM/CM ratio for each "familia"
+    # maintenance_counts = filtered_df.groupby(['familia', 'tipomanutencao']).size().unstack(fill_value=0)
+    # maintenance_counts['PM/CM'] = maintenance_counts['PREVENTIVA'] / maintenance_counts['CORRETIVA'].replace(0, np.nan)  # Avoid division by zero
     
-    # Merge the PM/CM ratio back to filtered_df
-    filtered_df = filtered_df.merge(maintenance_counts[['PM/CM']], on='familia')
+    # # Merge the PM/CM ratio back to filtered_df
+    # filtered_df = filtered_df.merge(maintenance_counts[['PM/CM']], on='familia')
     
-    # Step 3: Prepare data for regression and plotting
-    # Aggregate data by 'familia' to get average 'MTBF' and 'PM/CM' for plotting
-    agg_data = filtered_df.groupby('familia').agg({'MTBF':'mean', 'PM/CM':'mean'}).reset_index().dropna()
+    # # Step 3: Prepare data for regression and plotting
+    # # Aggregate data by 'familia' to get average 'MTBF' and 'PM/CM' for plotting
+    # agg_data = filtered_df.groupby('familia').agg({'MTBF':'mean', 'PM/CM':'mean'}).reset_index().dropna()
     
-    # Perform linear regression
-    X = agg_data[['PM/CM']]
-    y = agg_data['MTBF']
-    reg = LinearRegression().fit(X, y)
-    agg_data['Predicted_MTBF'] = reg.predict(X)
+    # # Perform linear regression
+    # X = agg_data[['PM/CM']]
+    # y = agg_data['MTBF']
+    # reg = LinearRegression().fit(X, y)
+    # agg_data['Predicted_MTBF'] = reg.predict(X)
     
-    # Calculate regression line equation
-    slope, intercept = reg.coef_[0], reg.intercept_
-    equation = f'MTBF = {slope:.2f}*PM/CM + {intercept:.2f}'
+    # # Calculate regression line equation
+    # slope, intercept = reg.coef_[0], reg.intercept_
+    # equation = f'MTBF = {slope:.2f}*PM/CM + {intercept:.2f}'
     
-    # Step 4: Plot
-    fig = px.scatter(agg_data, x='PM/CM', y='MTBF', trendline="ols", title='MTBF vs. PM/CM Ratio')
-    fig.add_traces(px.line(agg_data, x='PM/CM', y='Predicted_MTBF', title="").data)
-    fig.update_layout(annotations=[dict(x=0.5, y=0.9, xref="paper", yref="paper", text=equation, showarrow=False)])
+    # # Step 4: Plot
+    # fig = px.scatter(agg_data, x='PM/CM', y='MTBF', trendline="ols", title='MTBF vs. PM/CM Ratio')
+    # fig.add_traces(px.line(agg_data, x='PM/CM', y='Predicted_MTBF', title="").data)
+    # fig.update_layout(annotations=[dict(x=0.5, y=0.9, xref="paper", yref="paper", text=equation, showarrow=False)])
     
-    # Display the plot in Streamlit
-    col16.plotly_chart(fig, use_container_width=True)
+    # # Display the plot in Streamlit
+    # col16.plotly_chart(fig, use_container_width=True)
 
 
 

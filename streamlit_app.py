@@ -654,6 +654,31 @@ if authentication_status:
     col18.plotly_chart(fig_mttr_by_unidade, use_container_width=True)
 
 
+    # Step 1: Calculate Counts of "CORRETIVA" for each "UNIDADE"
+    corretiva_counts = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].groupby('empresa').size().reset_index(name='counts')
+    
+    # Calculate total counts for normalization (to get percentages)
+    total_counts = filtered_df.groupby('empresa').size().reset_index(name='total')
+    
+    # Merge to get counts of CORRETIVA and total counts by UNIDADE
+    corretiva_percentage_df = pd.merge(corretiva_counts, total_counts, on='empresa')
+    
+    # Calculate percentages
+    corretiva_percentage_df['percentage'] = (corretiva_percentage_df['counts'] / corretiva_percentage_df['total']) * 100
+    
+    # Step 2: Create the Donut Chart
+    fig_donut = px.pie(corretiva_percentage_df, names='empresa', values='percentage', hole=0.5,
+                       title='Percentual de Manutenção CORRETIVA por Unidade')
+    
+    # Optional: Customize chart appearance
+    fig_donut.update_traces(textinfo='percent+label', pull=[0.05 for _ in corretiva_percentage_df['empresa']])
+    fig_donut.update_layout(legend_title='Unidade')
+    
+    # Step 3: Display the Chart in col20
+    col19.plotly_chart(fig_donut, use_container_width=True)
+
+
+
 
 
 

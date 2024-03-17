@@ -577,44 +577,7 @@ if authentication_status:
     col15.plotly_chart(fig_pm_cm_by_unidade_desc, use_container_width=True)
 
 
-    # Assuming 'pm_counts' and 'cm_counts' are columns in your filtered_df that contain the counts of preventive and corrective maintenances respectively
-    # Calculate PM/CM ratio, replace CM counts of 0 with 1 to avoid division by zero
-    filtered_df['pm_cm_ratio'] = filtered_df['pm_counts'] / filtered_df['cm_counts'].replace({0: 1})
-    
-    # Your MTBF calculation should already be present in filtered_df
-    # Ensure it's correctly calculated and stored in a column, let's assume it's stored in 'MTBF'
-    
-    # Perform linear regression
-    X = filtered_df[['pm_cm_ratio']]
-    y = filtered_df['MTBF']
-    reg = LinearRegression().fit(X, y)
-    
-    # Predict y values for the regression line
-    y_pred = reg.predict(X)
-    
-    # Calculate the regression equation components
-    slope = reg.coef_[0]
-    intercept = reg.intercept_
-    regression_equation = f"y = {slope:.2f}x + {intercept:.2f}"
-    
-    # Plot scatter plot and regression line
-    fig = px.scatter(filtered_df, x='pm_cm_ratio', y='MTBF', trendline="ols",
-                     labels={'pm_cm_ratio': 'PM/CM Ratio', 'MTBF': 'MTBF (anos)'},
-                     title='MTBF vs. PM/CM Ratio with Regression Line')
-    
-    # Add regression equation to the plot
-    fig.add_annotation(x=0.5, y=1.05, xref="paper", yref="paper",
-                       text=f"Regression Equation: {regression_equation}", showarrow=False,
-                       font=dict(family="Arial", size=12, color="grey"),
-                       align="center", bgcolor="white")
-    
-    # Enhance layout
-    fig.update_layout(xaxis_title="PM/CM Ratio",
-                      yaxis_title="MTBF (Years)",
-                      title_x=0.5)  # Center the chart title
-    
-    # Display the chart in the specified column (col16)
-    col16.plotly_chart(fig, use_container_width=True)
+
 
 
 

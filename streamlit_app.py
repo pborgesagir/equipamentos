@@ -643,12 +643,16 @@ if authentication_status:
     # Calculate MTTR in days grouped by 'empresa' (UNIDADE)
     mttr_by_unidade_days = corretiva_df.groupby('empresa')['repair_time_days'].mean().reset_index()
     
-    # Create the bar chart for MTTR in days grouped by UNIDADE
+    # Sort the DataFrame by 'repair_time_days' in descending order
+    mttr_by_unidade_days = mttr_by_unidade_days.sort_values('repair_time_days', ascending=False)
+    
+    # Create the bar chart for MTTR in days grouped by UNIDADE with the sorted values
     fig_mttr_by_unidade = px.bar(mttr_by_unidade_days, x='empresa', y='repair_time_days', labels={'empresa': 'Unidade', 'repair_time_days': 'MTTR (dias)'},
                                  title="MTTR por Unidade em Dias")
     
     # Display the bar chart in col18
     col18.plotly_chart(fig_mttr_by_unidade, use_container_width=True)
+
 
 
 

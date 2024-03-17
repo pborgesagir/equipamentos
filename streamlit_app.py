@@ -208,6 +208,7 @@ if authentication_status:
     
     col10, col11, col13 = st.columns(3)
     col14, col15 = st.columns(2)
+    col17, col18 = st.columns(2)
     col16 = st.columns(1)[0]
     col1 = st.columns(1)[0]
     col2, col3 = st.columns(2)
@@ -624,6 +625,34 @@ if authentication_status:
     
     # # Display the plot in Streamlit
     # col16.plotly_chart(fig, use_container_width=True)
+
+
+    # Ensure 'abertura' and 'fechamento' are in datetime format for accurate calculations
+    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
+    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
+    
+    # Filter the DataFrame for 'CORRETIVA' maintenance operations
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    
+    # Calculate repair time in hours for each 'CORRETIVA' maintenance
+    corretiva_df['repair_time'] = (corretiva_df['fechamento'] - corretiva_df['abertura']).dt.total_seconds() / 3600
+    
+    
+    
+    # Group by 'empresa' (UNIDADE) and calculate the average MTTR for each
+    mttr_by_unidade = corretiva_df.groupby('empresa')['repair_time'].mean().reset_index()
+    
+    # Format the overall average MTTR to display with two decimal places
+    formatted_avg_mttr = "{:.2f} horas".format(overall_average_mttr)
+    
+    # Display the MTTR in col17 similar to your MTBF display in col10
+    col17.subheader('MTTR ⏳🛠️')
+    col17.metric(label='Tempo Médio Para Reparo', value=formatted_avg_mttr, delta=None)
+    
+    # Display the MTTR grouped by UNIDADE in col18
+    fig2 = px.bar(mttr_by_unidade, x='empresa', y='repair_time', labels={'empresa': 'Unidade', 'repair_time': 'Average MTTR (hours)'}, title="MTTR by Unidade")
+    col18.plotly_chart(fig2, use_container_width=True)
+
 
 
 

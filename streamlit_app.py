@@ -658,13 +658,13 @@ if authentication_status:
     corretiva_counts = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].groupby('empresa').size().reset_index(name='counts')
     
     # Calculate total counts for normalization (to get percentages)
-    total_counts = filtered_df.groupby('empresa').size().reset_index(name='total')
+    total_counts = filtered_df.size().reset_index(name='total')
     
     # Merge to get counts of CORRETIVA and total counts by UNIDADE
     corretiva_percentage_df = pd.merge(corretiva_counts, total_counts, on='empresa')
     
     # Calculate percentages
-    # corretiva_percentage_df['percentage'] = (corretiva_percentage_df['counts'] / corretiva_percentage_df['total']) * 100
+    corretiva_percentage_df['percentage'] = (corretiva_percentage_df['counts'] / corretiva_percentage_df['total']) * 100
     
     # Step 2: Create the Donut Chart
     fig_donut = px.pie(corretiva_percentage_df, names='empresa', values='percentage', hole=0.5,

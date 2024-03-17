@@ -655,19 +655,27 @@ if authentication_status:
 
 
 
-    # Step 1: Filter for "CORRETIVA" and group by "UNIDADE", then count occurrences
+    # Step 1: Group by "UNIDADE" and count occurrences of "CORRETIVA"
     corretiva_counts_by_unidade = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].groupby('empresa').size().reset_index(name='counts')
     
-    # Step 2: Create the Donut Chart
-    fig_donut_corretiva = px.pie(corretiva_counts_by_unidade, names='empresa', values='counts', hole=0.5,
-                                 title='Número de Manutenções CORRETIVA por Unidade')
+    # Calculate the total count of "CORRETIVA" for normalization
+    total_corretiva = corretiva_counts_by_unidade['counts'].sum()
+    
+    # Calculate the percentage of total "CORRETIVA" for each "UNIDADE"
+    corretiva_counts_by_unidade['percentage'] = (corretiva_counts_by_unidade['counts'] / total_corretiva) * 100
+    
+    # Step 2: Create the Donut Chart using percentages
+    fig_donut_corretiva_percentage = px.pie(corretiva_counts_by_unidade, names='empresa', values='percentage', hole=0.5,
+                                            title='Percentual de Manutenções CORRETIVA por Unidade',
+                                            labels={'percentage': 'Percentual'})
     
     # Optional: Customize chart appearance
-    fig_donut_corretiva.update_traces(textinfo='value+label', pull=[0.05 for _ in corretiva_counts_by_unidade['empresa']])
-    fig_donut_corretiva.update_layout(legend_title='Unidade')
+    fig_donut_corretiva_percentage.update_traces(textinfo='percent+label', pull=[0.05 for _ in corretiva_counts_by_unidade['empresa']])
+    fig_donut_corretiva_percentage.update_layout(legend_title='Unidade')
     
     # Step 3: Display the Chart in col19
-    col19.plotly_chart(fig_donut_corretiva, use_container_width=True)
+    col19.plotly_chart(fig_donut_corretiva_percentage, use_container_width=True)
+
 
 
 

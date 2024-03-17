@@ -627,35 +627,29 @@ if authentication_status:
     # col16.plotly_chart(fig, use_container_width=True)
 
 
-    # Ensure 'abertura' and 'fechamento' are in datetime format for accurate calculations
-    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
-    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
+    # Calculate repair time in days for each 'CORRETIVA' maintenance
+    corretiva_df['repair_time_days'] = (corretiva_df['fechamento'] - corretiva_df['abertura']).dt.total_seconds() / (3600 * 24)
     
-    # Filter the DataFrame for 'CORRETIVA' maintenance operations
-    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
-    
-    # Calculate repair time in hours for each 'CORRETIVA' maintenance
-    corretiva_df['repair_time'] = (corretiva_df['fechamento'] - corretiva_df['abertura']).dt.total_seconds() / 3600
-
-    # Calculate the overall average MTTR
-    overall_average_mttr = corretiva_df['repair_time'].mean()
-
-    
-    
-    
-    # Group by 'empresa' (UNIDADE) and calculate the average MTTR for each
-    mttr_by_unidade = corretiva_df.groupby('empresa')['repair_time'].mean().reset_index()
+    # Calculate the overall average MTTR in days
+    overall_average_mttr_days = corretiva_df['repair_time_days'].mean()
     
     # Format the overall average MTTR to display with two decimal places
-    formatted_avg_mttr = "{:.2f} horas".format(overall_average_mttr)
+    formatted_avg_mttr_days = "{:.2f} dias".format(overall_average_mttr_days)
     
-    # Display the MTTR in col17 similar to your MTBF display in col10
-    col17.subheader('MTTR ⏳🛠️')
-    col17.metric(label='Tempo Médio Para Reparo', value=formatted_avg_mttr, delta=None)
+    # Display the overall average MTTR in days in col17
+    col17.subheader('MTTR 🛠️⏳')
+    col17.metric(label='Tempo Médio Para Reparo', value=formatted_avg_mttr_days, delta=None)
     
-    # Display the MTTR grouped by UNIDADE in col18
-    fig2 = px.bar(mttr_by_unidade, x='empresa', y='repair_time', labels={'empresa': 'Unidade', 'repair_time': 'Average MTTR (hours)'}, title="MTTR by Unidade")
-    col18.plotly_chart(fig2, use_container_width=True)
+    # Calculate MTTR in days grouped by 'empresa' (UNIDADE)
+    mttr_by_unidade_days = corretiva_df.groupby('empresa')['repair_time_days'].mean().reset_index()
+    
+    # Create the bar chart for MTTR in days grouped by UNIDADE
+    fig_mttr_by_unidade = px.bar(mttr_by_unidade_days, x='empresa', y='repair_time_days', labels={'empresa': 'Unidade', 'repair_time_days': 'MTTR (dias)'},
+                                 title="MTTR por Unidade em Dias")
+    
+    # Display the bar chart in col18
+    col18.plotly_chart(fig_mttr_by_unidade, use_container_width=True)
+
 
 
 

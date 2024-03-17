@@ -579,56 +579,6 @@ if authentication_status:
 
 
 
-    
-    
-    # Assuming 'filtered_df' is your DataFrame
-    # Calculate PM/CM ratio
-    pm_cm_ratio = filtered_df.groupby('empresa').apply(lambda x: np.where(x['tipomanutencao'] == 'PREVENTIVA', 1, 0).sum() / np.where(x['tipomanutencao'] == 'CORRETIVA', 1, 0).sum()).reset_index(name='PM_CM_Ratio')
-    
-    # Calculate MTBF
-    mtbf = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].groupby('empresa')['equipment_age'].mean().reset_index(name='MTBF')
-    
-    # Merge PM/CM ratio and MTBF on 'empresa'
-    merged_data = pd.merge(pm_cm_ratio, mtbf, on='empresa')
-    
-    # Remove any infinity or NaN values
-    merged_data.replace([np.inf, -np.inf], np.nan, inplace=True)
-    merged_data.dropna(inplace=True)
-    
-    # Plotting
-    fig = go.Figure()
-    
-    # Scatter plot
-    fig.add_trace(go.Scatter(x=merged_data['PM_CM_Ratio'], y=merged_data['MTBF'], mode='markers', name='Empresas'))
-    
-    # Linear Regression
-    X = merged_data['PM_CM_Ratio'].values.reshape(-1, 1)
-    y = merged_data['MTBF'].values
-    reg = LinearRegression().fit(X, y)
-    
-    # Predictions for the regression line
-    pred = reg.predict(X)
-    
-    # Adding regression line to plot
-    fig.add_trace(go.Scatter(x=merged_data['PM_CM_Ratio'], y=pred, mode='lines', name='Regression Line'))
-    
-    # Calculating the equation of the line
-    slope = reg.coef_[0]
-    intercept = reg.intercept_
-    equation_text = f"y = {slope:.2f}x + {intercept:.2f}"
-    r2 = r2_score(y, pred)
-    
-    # Add equation and R^2 value as annotation
-    fig.add_annotation(x=max(merged_data['PM_CM_Ratio']), y=max(pred), text=f"{equation_text}, R² = {r2:.2f}", showarrow=False, yshift=10)
-    
-    # Layout settings
-    fig.update_layout(title='Scatter Plot with Regression Line (MTBF vs. PM/CM Ratio)',
-                      xaxis_title='PM/CM Ratio',
-                      yaxis_title='MTBF',
-                      title_x=0.5)
-    
-    # Display the plot in col16
-    col16.plotly_chart(fig, use_container_width=True)
 
 
 

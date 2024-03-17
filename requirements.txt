@@ -11,3 +11,5 @@ streamlit_option_menu==0.3.2
 kaleido
 pygwalker
 weasyprint
+scikit-learn==0.24.2
+statsmodels==0.12.2

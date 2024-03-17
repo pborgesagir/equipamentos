@@ -489,8 +489,18 @@ if authentication_status:
     
     # Count the occurrences of "CORRETIVA"
     num_corretivas = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].shape[0]
-    col11.subheader('CORRETIVAS 🛠️')
-    col11.metric(label='Quantidade total', value=num_corretivas, delta=None)
+    col11.markdown("""
+        <div style='border: 2px solid #1f77b4; border-radius: 5px; padding: 10px;'>
+            <h3 style='text-align: center;'>CORRETIVAS 🛠️</h3>
+            <div style='display: flex; justify-content: center;'>
+                <h2 style='color: #1f77b4;'>{}</h2>
+            </div>
+        </div>
+    """.format(num_corretivas), unsafe_allow_html=True)
+    
+    
+    # col11.subheader('CORRETIVAS 🛠️')
+    # col11.metric(label='Quantidade total', value=num_corretivas, delta=None)
 
 
 

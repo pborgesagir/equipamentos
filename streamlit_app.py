@@ -646,6 +646,9 @@ if authentication_status:
      
     # Embed the HTML into the Streamlit app
     components.html(pyg_html, height=1000, scrolling=True)
+
+    # Display the DataFrame in Streamlit
+    st.dataframe(filtered_df)
     
     
     
@@ -665,5 +668,4 @@ if authentication_status:
     
         
         
-        # Display the DataFrame in Streamlit
-        st.dataframe(filtered_df)
+        

@@ -664,7 +664,7 @@ if authentication_status:
     corretiva_percentage_df = pd.merge(corretiva_counts, total_counts, on='empresa')
     
     # Calculate percentages
-    corretiva_percentage_df['percentage'] = (corretiva_percentage_df['counts'] / corretiva_percentage_df['total']) * 100
+    # corretiva_percentage_df['percentage'] = (corretiva_percentage_df['counts'] / corretiva_percentage_df['total']) * 100
     
     # Step 2: Create the Donut Chart
     fig_donut = px.pie(corretiva_percentage_df, names='empresa', values='percentage', hole=0.5,

@@ -205,7 +205,7 @@ if authentication_status:
 
     authenticator.logout("Logout", "sidebar")
     
-    col11 = st.columns(1)[0]
+    col100, col11, col110 = st.columns(3)
     col10, col17, col13 = st.columns(3)
     col14, col15 = st.columns(2)
     col19, col18 = st.columns(2)
@@ -488,20 +488,9 @@ if authentication_status:
     
     
     # Count the occurrences of "CORRETIVA"
-    num_corretivas = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].shape[0]
-    col11.markdown("""
-        <div style='border: 2px solid #1f77b4; border-radius: 5px; padding: 10px;'>
-            <h3 style='text-align: center;'>CORRETIVAS 🛠️</h3>
-            <h5 style='text-align: center;'>Quantidade Total</h5>
-            <div style='display: flex; justify-content: center;'>
-                <h2 style='color: #1f77b4;'>{}</h2>
-            </div>
-        </div>
-    """.format(num_corretivas), unsafe_allow_html=True)
-    
-    
-    # col11.subheader('CORRETIVAS 🛠️')
-    # col11.metric(label='Quantidade total', value=num_corretivas, delta=None)
+    num_corretivas = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA'].shape[0] 
+    col11.subheader('CORRETIVAS 🛠️')
+    col11.metric(label='Quantidade total', value=num_corretivas, delta=None)
 
 
 

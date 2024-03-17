@@ -648,7 +648,7 @@ if authentication_status:
     
     # Create the bar chart for MTTR in days grouped by UNIDADE with the sorted values
     fig_mttr_by_unidade = px.bar(mttr_by_unidade_days, x='empresa', y='repair_time_days', labels={'empresa': 'Unidade', 'repair_time_days': 'MTTR (dias)'},
-                                 title="MTTR por Unidade em Dias")
+                                 title="MTTR por Unidade (dias)")
     
     # Display the bar chart in col18
     col18.plotly_chart(fig_mttr_by_unidade, use_container_width=True)

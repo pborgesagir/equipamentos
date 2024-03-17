@@ -636,6 +636,10 @@ if authentication_status:
     
     # Calculate repair time in hours for each 'CORRETIVA' maintenance
     corretiva_df['repair_time'] = (corretiva_df['fechamento'] - corretiva_df['abertura']).dt.total_seconds() / 3600
+
+    # Calculate the overall average MTTR
+    overall_average_mttr = corretiva_df['repair_time'].mean()
+
     
     
     

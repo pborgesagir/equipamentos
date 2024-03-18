@@ -211,7 +211,6 @@ if authentication_status:
     col19, col18 = st.columns(2)
     col16 = st.columns(1)[0]
     col1 = st.columns(1)[0]
-    col2, col3 = st.columns(2)
     col4 = st.columns(1)[0]
     col5 = st.columns(1)[0]
     col6 = st.columns(1)[0]
@@ -219,6 +218,7 @@ if authentication_status:
     col8 = st.columns(1)[0]
     col9 = st.columns(1)[0]
     col12 = st.columns(1)[0]
+    col2, col3 = st.columns(2)
 
 
 
@@ -236,7 +236,7 @@ if authentication_status:
                  y='tipomanutencao',
                  color='empresa',  # This adds color based on the 'empresa' column
                  orientation='h',  # This makes the bar chart horizontal
-                 title='Apresentação de Serviços por Empresa',
+                 title='Tipos de Manutenção por Unidade',
                  labels={'count': 'Quantidade', 'tipomanutencao': 'Tipo de Manutenção', 'empresa': 'Empresa'},
                  template='plotly_white',  # Use a clean template
                  category_orders={"tipomanutencao": grouped_tipomanutencao['tipomanutencao'].unique()})  # Maintain the order of 'tipomanutencao'
@@ -529,7 +529,7 @@ if authentication_status:
     
     # Plot the tendency line chart for 'Tempo médio de resolução'
     fig = px.line(avg_tempo_resolucao_per_period, x='Year-Month', y='tempo_de_resolucao',
-                  title='Tempo Médio de Resolução por Mês',
+                  title='MTTR ao longo do tempo (dias)',
                   labels={'tempo_de_resolucao': 'Tempo Médio de Resolução (Dias)', 'Year-Month': 'Mês'},
                   markers=True,  # Add markers to each data point for better visibility
                   template='plotly_white')
@@ -666,7 +666,7 @@ if authentication_status:
     
     # Step 2: Create the Donut Chart using percentages
     fig_donut_corretiva_percentage = px.pie(corretiva_counts_by_unidade, names='empresa', values='percentage', hole=0.5,
-                                            title='Percentual de Manutenções CORRETIVA por Unidade',
+                                            title='Manutenções CORRETIVA por Unidade (%)',
                                             labels={'percentage': 'Percentual'})
     
     # Optional: Customize chart appearance

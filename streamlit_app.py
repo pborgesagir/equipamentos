@@ -90,6 +90,9 @@ if authentication_status:
     
     df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(13)))
     df = df.sort_values("fechamento")
+    # Remove duplicate rows based on the "os" column, keeping the first occurrence
+    df = df.drop_duplicates(subset=['os'], keep='first')
+
 
 
     # Convert the "fechamento" column to datetime with errors='coerce'

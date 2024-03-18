@@ -211,12 +211,12 @@ if authentication_status:
     col19, col18 = st.columns(2)
     col16 = st.columns(1)[0]
     col1 = st.columns(1)[0]
+    col9 = st.columns(1)[0]
     col4 = st.columns(1)[0]
     col5 = st.columns(1)[0]
     col6 = st.columns(1)[0]
     col7 = st.columns(1)[0]
     col8 = st.columns(1)[0]
-    col9 = st.columns(1)[0]
     col12 = st.columns(1)[0]
     col2, col3 = st.columns(2)
 

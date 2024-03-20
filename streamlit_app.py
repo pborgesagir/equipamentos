@@ -69,20 +69,7 @@ if authentication_status:
     
     # Google Sheets URL
     url = "https://docs.google.com/spreadsheets/d/1GswNpQuhhc6udp59clV5s6dDnBfFF91rofaRbMsDdT0/edit#gid=704841034"
-    # Centered title using HTML tags
-    st.markdown("<h1 style='text-align: center;'>GESTÃO DE EQUIPAMENTOS</h1>", unsafe_allow_html=True)
-    
-    
-    # Adding a centered subtitle with larger font size using HTML
-    st.markdown("""
-        <div style='text-align: center; font-size: 36px;'>
-            <b>ENGENHARIA CLÍNICA</b>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
+   
     
     st.sidebar.image('index.png', width=150)
     st.sidebar.title(f"Bem-vindo, {name}")
@@ -208,9 +195,24 @@ if authentication_status:
     # Extract the minimum and maximum dates from the filtered DataFrame
     min_date = filtered_df['fechamento'].min().strftime('%Y-%m-%d')
     max_date = filtered_df['fechamento'].max().strftime('%Y-%m-%d')
+
+     # Centered title using HTML tags
+    st.markdown("<h1 style='text-align: center;'>GESTÃO DE EQUIPAMENTOS</h1>", unsafe_allow_html=True)
     
-    # Display the date range in the sidebar
-    st.sidebar.markdown(f"**Período Selecionado:** {min_date} - {max_date}")
+    
+    # Adding a centered subtitle with larger font size using HTML
+    st.markdown("""
+        <div style='text-align: center; font-size: 36px;'>
+            <b>ENGENHARIA CLÍNICA</b>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Display the date range below the subtitle
+    st.markdown(f"<p style='text-align: center; font-size: 16px;'>Período Selecionado: {min_date} até {max_date}</p>", unsafe_allow_html=True)
 
 
     authenticator.logout("Logout", "sidebar")

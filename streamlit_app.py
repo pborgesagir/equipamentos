@@ -205,6 +205,13 @@ if authentication_status:
     if numero_setor and numero_setor != ["Todos"]:
         filtered_df = filtered_df[filtered_df["setor"].isin(numero_setor)]
 
+    # Extract the minimum and maximum dates from the filtered DataFrame
+    min_date = filtered_df['fechamento'].min().strftime('%Y-%m-%d')
+    max_date = filtered_df['fechamento'].max().strftime('%Y-%m-%d')
+    
+    # Display the date range in the sidebar
+    st.sidebar.markdown(f"**Período Selecionado:** {min_date} - {max_date}")
+
 
     authenticator.logout("Logout", "sidebar")
     

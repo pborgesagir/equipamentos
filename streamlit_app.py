@@ -387,7 +387,7 @@ if authentication_status:
     monthly_performance['Closure Rate'] = (monthly_performance['Closed'] / monthly_performance['Opened']) * 100
     
     # Plot the line chart for closure rate over time
-    fig = px.line(monthly_performance, x='Year-Month', y='Closure Rate', title='Performance of Closure Rate Over Time for CORRETIVA Maintenance',
+    fig = px.line(monthly_performance, x='Year-Month', y='Closure Rate', title='Relação de OS Fechadas/Abertas (%)',
                   labels={'Closure Rate': 'Closure Rate (%)', 'Year-Month': 'Year-Month'},
                   markers=True)  # Add markers to each data point
     

@@ -314,13 +314,13 @@ if authentication_status:
     fig = go.Figure()
     fig.add_trace(go.Bar(
         x=monthly_data['Year-Month'],
-        y=monthly_data['Opened'],
+        y=monthly_data['abertura'], #y=monthly_data['Opened']
         name='Abertas',
         marker_color='indianred'
     ))
     fig.add_trace(go.Bar(
         x=monthly_data['Year-Month'],
-        y=monthly_data['Closed'],
+        y=monthly_data['fechamento'],
         name='Fechadas',
         marker_color='lightsalmon'
     ))

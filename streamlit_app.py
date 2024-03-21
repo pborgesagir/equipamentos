@@ -351,37 +351,91 @@ if authentication_status:
     col2.plotly_chart(fig, use_container_width=True)
 
 
-    # Calculate the total number of opened requests per month
-    # Assuming 'abertura' represents the 'opened' status in your data
-    opened_requests_per_month = filtered_df.groupby('Year-Month')['abertura'].count().reset_index()
-    opened_requests_per_month.columns = ['Year-Month', 'Opened']
+    # Ensure 'abertura' and 'fechamento' dates are in datetime format
+    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
+    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
     
-    # Calculate the total number of closed requests per month
-    # Assuming 'fechamento' represents the 'closed' status in your data
-    closed_requests_per_month = filtered_df.groupby('Year-Month')['fechamento'].count().reset_index()
-    closed_requests_per_month.columns = ['Year-Month', 'Closed']
+    # Filter the DataFrame for only 'CORRETIVA' maintenance requests
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
     
-    # Merge the two dataframes on 'Year-Month'
-    monthly_performance = pd.merge(opened_requests_per_month, closed_requests_per_month, on='Year-Month')
+    # Calculate 'Year-Month' for 'abertura' and 'fechamento'
+    corretiva_df['Year-Month Abertura'] = corretiva_df['abertura'].dt.to_period('M').astype(str)
+    corretiva_df['Year-Month Fechamento'] = corretiva_df['fechamento'].dt.to_period('M').astype(str)
     
-    # Calculate the percentage of closed requests
+    # Count unique 'CORRETIVA' maintenance requests that were opened each month
+    opened_counts = corretiva_df.groupby('Year-Month Abertura').size().reset_index(name='Opened')
+    
+    # Count unique 'CORRETIVA' maintenance requests that were closed each month
+    closed_counts = corretiva_df.groupby('Year-Month Fechamento').size().reset_index(name='Closed')
+    closed_counts = closed_counts[closed_counts['Year-Month Fechamento'] != 'NaT']  # Exclude NaT values
+    
+    # Merge the opened and closed counts on their 'Year-Month'
+    monthly_performance = pd.merge(opened_counts, closed_counts, left_on='Year-Month Abertura', right_on='Year-Month Fechamento', how='outer').fillna(0)
+    
+    # Rename columns for clarity and consistency
+    monthly_performance.rename(columns={'Year-Month Abertura': 'Year-Month'}, inplace=True)
+    monthly_performance.drop(['Year-Month Fechamento'], axis=1, inplace=True)
+    
+    # Correct the 'Year-Month' to be consistent
+    monthly_performance['Year-Month'] = monthly_performance.apply(lambda row: row['Year-Month'] if row['Opened'] > 0 else row['Year-Month Fechamento'], axis=1)
+    
+    # Convert 'Opened' and 'Closed' to int if they were floats after merging
+    monthly_performance['Opened'] = monthly_performance['Opened'].astype(int)
+    monthly_performance['Closed'] = monthly_performance['Closed'].astype(int)
+    
+    # Calculate the closure rate
     monthly_performance['Closure Rate'] = (monthly_performance['Closed'] / monthly_performance['Opened']) * 100
     
-    # Plot the line chart
-    fig = px.line(monthly_performance, x='Year-Month', y='Closure Rate', title='Performance of Closure Rate Over Time')
-    
-    # Add a horizontal line for the goal (Meta) at 85%
-    fig.add_hline(y=85, line_dash="dash", line_color="red", annotation_text="Meta 85%", annotation_position="bottom right")
+    # Plot the line chart for closure rate over time
+    fig = px.line(monthly_performance, x='Year-Month', y='Closure Rate', title='Performance of Closure Rate Over Time for CORRETIVA Maintenance',
+                  labels={'Closure Rate': 'Closure Rate (%)', 'Year-Month': 'Year-Month'},
+                  markers=True)  # Add markers to each data point
     
     # Enhance layout
-    fig.update_layout(xaxis_title="Year-Month",
-                      yaxis_title="Closure Rate (%)",
-                      yaxis=dict(tickformat=".0f"),  # Format y-axis tick labels as integers
-                      legend=dict(title="Legend"),
-                      title_x=0.5)  # Center the chart title
+    fig.update_layout(xaxis_title="Year-Month", yaxis_title="Closure Rate (%)", title_x=0.5)
     
-    # Display the chart
+    # Display the chart in col3
     col3.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+
+    
+
+
+    # # Calculate the total number of opened requests per month
+    # # Assuming 'abertura' represents the 'opened' status in your data
+    # opened_requests_per_month = filtered_df.groupby('Year-Month')['abertura'].count().reset_index()
+    # opened_requests_per_month.columns = ['Year-Month', 'Opened']
+    
+    # # Calculate the total number of closed requests per month
+    # # Assuming 'fechamento' represents the 'closed' status in your data
+    # closed_requests_per_month = filtered_df.groupby('Year-Month')['fechamento'].count().reset_index()
+    # closed_requests_per_month.columns = ['Year-Month', 'Closed']
+    
+    # # Merge the two dataframes on 'Year-Month'
+    # monthly_performance = pd.merge(opened_requests_per_month, closed_requests_per_month, on='Year-Month')
+    
+    # # Calculate the percentage of closed requests
+    # monthly_performance['Closure Rate'] = (monthly_performance['Closed'] / monthly_performance['Opened']) * 100
+    
+    # # Plot the line chart
+    # fig = px.line(monthly_performance, x='Year-Month', y='Closure Rate', title='Performance of Closure Rate Over Time')
+    
+    # # Add a horizontal line for the goal (Meta) at 85%
+    # fig.add_hline(y=85, line_dash="dash", line_color="red", annotation_text="Meta 85%", annotation_position="bottom right")
+    
+    # # Enhance layout
+    # fig.update_layout(xaxis_title="Year-Month",
+    #                   yaxis_title="Closure Rate (%)",
+    #                   yaxis=dict(tickformat=".0f"),  # Format y-axis tick labels as integers
+    #                   legend=dict(title="Legend"),
+    #                   title_x=0.5)  # Center the chart title
+    
+    # # Display the chart
+    # col3.plotly_chart(fig, use_container_width=True)
 
 
 

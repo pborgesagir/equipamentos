@@ -264,11 +264,40 @@ if authentication_status:
     col1.plotly_chart(fig, use_container_width=True)
 
 
+    # First, ensure 'abertura' and 'fechamento' dates are in datetime format for accurate processing
+    filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
+    filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
+    
+    # Calculate 'Year-Month' for both 'abertura' and 'fechamento'
+    filtered_df['Year-Month Abertura'] = filtered_df['abertura'].dt.to_period('M').astype(str)
+    filtered_df['Year-Month Fechamento'] = filtered_df['fechamento'].dt.to_period('M').astype(str)
+    
+    # Count unique maintenance requests that were opened each month
+    opened_counts = filtered_df.groupby('Year-Month Abertura').size().reset_index(name='Opened')
+    
+    # Count unique maintenance requests that were closed each month
+    closed_counts = filtered_df.groupby('Year-Month Fechamento').size().reset_index(name='Closed')
+    closed_counts = closed_counts[closed_counts['Year-Month Fechamento'] != 'NaT']  # Exclude NaT values that might come from missing 'fechamento'
+    
+    # Merge the opened and closed counts on their 'Year-Month'
+    monthly_data = pd.merge(opened_counts, closed_counts, left_on='Year-Month Abertura', right_on='Year-Month Fechamento', how='outer').fillna(0)
+    
+    # Rename columns for clarity and consistency
+    monthly_data.rename(columns={'Year-Month Abertura': 'Year-Month'}, inplace=True)
+    monthly_data.drop(['Year-Month Fechamento'], axis=1, inplace=True)
+    
+    # Convert 'Opened' and 'Closed' to int if they were floats after merging
+    monthly_data['Opened'] = monthly_data['Opened'].astype(int)
+    monthly_data['Closed'] = monthly_data['Closed'].astype(int)
+
+
+
+
 
     
-    # Assuming 'abertura' is the number of opened requests and 'fechamento' is the number of closed requests
-    # Group by 'Year-Month' and calculate the counts
-    monthly_data = filtered_df.groupby('Year-Month').agg({'abertura':'count', 'fechamento':'count'}).reset_index()
+    # # Assuming 'abertura' is the number of opened requests and 'fechamento' is the number of closed requests
+    # # Group by 'Year-Month' and calculate the counts
+    # monthly_data = filtered_df.groupby('Year-Month').agg({'abertura':'count', 'fechamento':'count'}).reset_index()
     
 
 

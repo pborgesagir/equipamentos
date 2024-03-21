@@ -264,19 +264,22 @@ if authentication_status:
     col1.plotly_chart(fig, use_container_width=True)
 
 
-    # First, ensure 'abertura' and 'fechamento' dates are in datetime format for accurate processing
+    # Ensure 'abertura' and 'fechamento' dates are in datetime format
     filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
     filtered_df['fechamento'] = pd.to_datetime(filtered_df['fechamento'], errors='coerce')
     
-    # Calculate 'Year-Month' for both 'abertura' and 'fechamento'
-    filtered_df['Year-Month Abertura'] = filtered_df['abertura'].dt.to_period('M').astype(str)
-    filtered_df['Year-Month Fechamento'] = filtered_df['fechamento'].dt.to_period('M').astype(str)
+    # Filter the DataFrame for only 'CORRETIVA' maintenance requests
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
     
-    # Count unique maintenance requests that were opened each month
-    opened_counts = filtered_df.groupby('Year-Month Abertura').size().reset_index(name='Opened')
+    # Calculate 'Year-Month' for 'abertura' and 'fechamento'
+    corretiva_df['Year-Month Abertura'] = corretiva_df['abertura'].dt.to_period('M').astype(str)
+    corretiva_df['Year-Month Fechamento'] = corretiva_df['fechamento'].dt.to_period('M').astype(str)
     
-    # Count unique maintenance requests that were closed each month
-    closed_counts = filtered_df.groupby('Year-Month Fechamento').size().reset_index(name='Closed')
+    # Count unique 'CORRETIVA' maintenance requests that were opened each month
+    opened_counts = corretiva_df.groupby('Year-Month Abertura').size().reset_index(name='Opened')
+    
+    # Count unique 'CORRETIVA' maintenance requests that were closed each month
+    closed_counts = corretiva_df.groupby('Year-Month Fechamento').size().reset_index(name='Closed')
     closed_counts = closed_counts[closed_counts['Year-Month Fechamento'] != 'NaT']  # Exclude NaT values that might come from missing 'fechamento'
     
     # Merge the opened and closed counts on their 'Year-Month'
@@ -286,9 +289,14 @@ if authentication_status:
     monthly_data.rename(columns={'Year-Month Abertura': 'Year-Month'}, inplace=True)
     monthly_data.drop(['Year-Month Fechamento'], axis=1, inplace=True)
     
+    # Correct the 'Year-Month' to be consistent
+    monthly_data['Year-Month'] = monthly_data.apply(lambda row: row['Year-Month'] if row['Opened'] > 0 else row['Year-Month Fechamento'], axis=1)
+    
     # Convert 'Opened' and 'Closed' to int if they were floats after merging
     monthly_data['Opened'] = monthly_data['Opened'].astype(int)
     monthly_data['Closed'] = monthly_data['Closed'].astype(int)
+
+
 
 
 

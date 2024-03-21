@@ -212,7 +212,7 @@ if authentication_status:
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Display the date range below the subtitle
-    st.markdown(f"<p style='text-align: center; font-size: 16px;'>Período Selecionado: {min_date} até {max_date}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align: center; font-size: 16px;'>Período: {min_date} até {max_date}</p>", unsafe_allow_html=True)
 
 
     authenticator.logout("Logout", "sidebar")

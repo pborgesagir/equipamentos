@@ -776,7 +776,7 @@ if authentication_status:
     fig.update_layout(annotations=[dict(x=0.5, y=0.9, xref="paper", yref="paper", text=equation, showarrow=False)])
     
     # Assuming you're using Streamlit to display the plot
-    # col16.plotly_chart(fig, use_container_width=True)
+    col16.plotly_chart(fig, use_container_width=True)
 
 
 

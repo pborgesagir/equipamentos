@@ -827,7 +827,7 @@ if authentication_status:
     # Step 2: Create the Donut Chart using percentages
     fig_donut_tags_percentage = px.pie(unique_tags_per_empresa, names='empresa', values='percentage', hole=0.5,
                                        title='Quantidade de Equipamentos por Unidade',
-                                       hover_data={'counts': True}, 
+                                       hover_data={'Quantidade': True}, 
                                        labels={'percentage': 'Percentual'})
     
     # Optional: Customize chart appearance

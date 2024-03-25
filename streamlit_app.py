@@ -737,16 +737,16 @@ if authentication_status:
     fig = go.Figure()
     
     # Add the regression line
-    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['Predicted_MTBF'], text=equation, mode='lines', name='Regression Line'))
+    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['Predicted_MTBF'], text=equation, mode='lines', name='Equação de Regressão'))
     
     # Add points, coloring based on their position relative to the regression line
-    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='PM/CM x MTBF',
+    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='',
                              marker=dict(color=agg_data['color']), text=agg_data['familia']))
     
     # Update layout with titles and labels
     fig.update_layout(title='MTBF x Razão PM/CM',
                       xaxis_title='Razão PM/CM', yaxis_title='MTBF',
-                      legend_title='Legend')
+                      legend_title='Legenda')
     
     # Display the plot in Streamlit
     col16.plotly_chart(fig, use_container_width=True)

@@ -737,7 +737,7 @@ if authentication_status:
     fig = go.Figure()
     
     # Add the regression line
-    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['Predicted_MTBF'], text='equation', mode='lines', name='Regression Line'))
+    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['Predicted_MTBF'], text=equation, mode='lines', name='Regression Line'))
     
     # Add points, coloring based on their position relative to the regression line
     fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='PM/CM x MTBF',

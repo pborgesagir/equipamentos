@@ -221,6 +221,7 @@ if authentication_status:
     col11, col10, col17, col13 = st.columns(4)
     col14, col15 = st.columns(2)
     col19, col18 = st.columns(2)
+    col20, col21 = st.columns(2)
     col16 = st.columns(1)[0]
     col1 = st.columns(1)[0]
     col9 = st.columns(1)[0]
@@ -811,6 +812,44 @@ if authentication_status:
     
     # Step 3: Display the Chart in col19
     col19.plotly_chart(fig_donut_corretiva_percentage, use_container_width=True)
+
+
+
+    # Calculate the count of unique tags for each 'empresa'
+    unique_tags_per_empresa = filtered_df.groupby('empresa')['tag'].nunique().reset_index()
+    
+    # Generate the pie chart
+    fig_col21 = px.pie(unique_tags_per_empresa, values='tag', names='empresa',
+                       title='Percentual e Quantidade de Tags Únicas por Empresa',
+                       hole=0.3)
+    
+    # Improve layout
+    fig_col21.update_traces(textinfo='percent+label')
+    fig_col21.update_layout(legend_title="Empresa")
+    
+    # Display the chart in col21
+    col21.plotly_chart(fig_col21, use_container_width=True)
+
+
+    # Filter for 'CORRETIVA' in 'tipomanutencao'
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    
+    # Count occurrences of each 'causa'
+    causa_counts = corretiva_df['causa'].value_counts().reset_index()
+    causa_counts.columns = ['causa', 'quantidade']
+    
+    # Generate the horizontal bar chart
+    fig_col20 = px.bar(causa_counts, x='quantidade', y='causa', orientation='h',
+                       title='Quantidades por Causa em Manutenções Corretivas',
+                       labels={'quantidade': 'Quantidade', 'causa': 'Causa'})
+    
+    # Improve layout
+    fig_col20.update_layout(xaxis_title="Quantidade", yaxis_title="Causa", title_x=0.5, yaxis={'categoryorder': 'total ascending'})
+    
+    # Display the chart in a new column (assuming col20 is defined similarly to others)
+    col20.plotly_chart(fig_col20, use_container_width=True)
+
+
 
 
 

@@ -862,6 +862,70 @@ if authentication_status:
 
 
 
+    # Ensure 'cadastro' and 'instalacao' are in datetime format
+    filtered_df['cadastro'] = pd.to_datetime(filtered_df['cadastro'], errors='coerce')
+    filtered_df['instalacao'] = pd.to_datetime(filtered_df['instalacao'], errors='coerce')
+    
+    # Determine the oldest date between 'cadastro' and 'instalacao' for each equipment
+    filtered_df['oldest_date'] = filtered_df[['cadastro', 'instalacao']].min(axis=1)
+    
+    # Calculate the age of the equipment in years
+    filtered_df['equipment_age'] = ((datetime.now() - filtered_df['oldest_date']) / np.timedelta64(1, 'Y')).astype(float)
+    
+    # Filter for 'CORRETIVA' in 'tipomanutencao' and exclude empty or "SEM MODELO" in 'modelo'
+    corretiva_df = filtered_df[(filtered_df['tipomanutencao'] == 'CORRETIVA') & (filtered_df['modelo'].notna()) & (filtered_df['modelo'] != "SEM MODELO")]
+    
+    # Group by 'tag' and count the occurrences of "CORRETIVA"
+    corretiva_count = corretiva_df.groupby('tag').size().reset_index(name='corretiva_count')
+    
+    # Merge back to get ages and models for each tag
+    corretiva_with_age = pd.merge(corretiva_count, filtered_df[['tag', 'equipment_age', 'modelo']].drop_duplicates(), on='tag')
+    
+    # Calculate MTBF in years (assuming corretiva_count > 0 to avoid division by zero)
+    corretiva_with_age['MTBF'] = corretiva_with_age['equipment_age'] / corretiva_with_age['corretiva_count']
+    
+    # Calculate the average MTBF for each 'modelo'
+    avg_mtbf_per_modelo = corretiva_with_age.groupby('modelo')['MTBF'].mean().reset_index()
+    
+    # Sort the results for better visualization
+    avg_mtbf_per_modelo = avg_mtbf_per_modelo.sort_values('MTBF', ascending=False)
+    
+    # Plot the bar chart for average MTBF per modelo
+    fig_col22 = px.bar(avg_mtbf_per_modelo, x='modelo', y='MTBF',
+                       title='MTBF por Modelo',
+                       labels={'MTBF': 'MTBF (anos)', 'modelo': 'Modelo'},
+                       template='plotly_white')
+    
+    # Enhance layout
+    fig_col22.update_layout(xaxis_title="Modelo",
+                            yaxis_title="MTBF (anos)",
+                            title_x=0.5,
+                            height=800)  # Center the chart title
+    
+    # Display the chart in col22
+    col22.plotly_chart(fig_col22, use_container_width=True)
+    
+    # Plot the scatter plot for MTBF vs. Equipment Age colored by Modelo
+    fig_col23 = px.scatter(corretiva_with_age, x='equipment_age', y='MTBF', color='modelo',
+                           title='MTBF por Modelo',
+                           labels={'equipment_age': 'Idade equipamento (anos)', 'MTBF': 'Tempo médio entre falhas (Anos)'},
+                           hover_data=['tag'],  # Show equipment 'tag' on hover
+                           template='plotly_white')
+    
+    # Enhance layout
+    fig_col23.update_layout(xaxis_title="Idade do Equipamento (Anos)",
+                            yaxis_title="MTBF (Anos)",
+                            legend_title="Modelo",
+                            title_x=0.5,
+                            height=800)  # Center the chart title
+    
+    # Display the chart in col23
+    col23.plotly_chart(fig_col23, use_container_width=True)
+
+
+
+
+
 
 
 

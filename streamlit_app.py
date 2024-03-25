@@ -740,12 +740,13 @@ if authentication_status:
     fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['Predicted_MTBF'], mode='lines', name='Regression Line'))
     
     # Add points, coloring based on their position relative to the regression line
-    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='Actual MTBF',
+    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='PM/CM x MTBF',
                              marker=dict(color=agg_data['color']), text=agg_data['familia']))
     
     # Update layout with titles and labels
-    fig.update_layout(title='MTBF x Razão PM/CM com cores diferenciadas por posição relativa à linha de regressão',
-                      xaxis_title='PM/CM Ratio', yaxis_title='MTBF',
+    fig.update_layout(title='MTBF x Razão PM/CM',
+                      xaxis_title='Razão PM/CM', yaxis_title='MTBF',
+                      text=equation,
                       legend_title='Legend')
     
     # Display the plot in Streamlit

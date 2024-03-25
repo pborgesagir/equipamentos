@@ -850,7 +850,7 @@ if authentication_status:
     
     # Generate the horizontal bar chart for the top 8 causes
     fig_col20 = px.bar(causa_counts, x='quantidade', y='causa', orientation='h',
-                       title='Causas em Manutenções Corretivas',
+                       title='Causas das Corretivas',
                        labels={'quantidade': 'Quantidade', 'causa': 'Causa'})
     
     # Improve layout

@@ -815,20 +815,27 @@ if authentication_status:
 
 
 
-    # Calculate the count of unique tags for each 'empresa'
-    unique_tags_per_empresa = filtered_df.groupby('empresa')['tag'].nunique().reset_index()
+    # Step 1: Calculate the count of unique tags for each 'empresa'
+    unique_tags_per_empresa = filtered_df.groupby('empresa')['tag'].nunique().reset_index(name='counts')
     
-    # Generate the pie chart
-    fig_col21 = px.pie(unique_tags_per_empresa, values='tag', names='empresa',
-                       title='Percentual e Quantidade de Tags Únicas por Empresa',
-                       hole=0.3)
+    # Calculate the total count of unique tags for normalization
+    total_unique_tags = unique_tags_per_empresa['counts'].sum()
     
-    # Improve layout
-    fig_col21.update_traces(textinfo='percent+label')
-    fig_col21.update_layout(legend_title="Empresa")
+    # Calculate the percentage of total unique tags for each 'empresa'
+    unique_tags_per_empresa['percentage'] = (unique_tags_per_empresa['counts'] / total_unique_tags) * 100
     
-    # Display the chart in col21
-    col21.plotly_chart(fig_col21, use_container_width=True)
+    # Step 2: Create the Donut Chart using percentages
+    fig_donut_tags_percentage = px.pie(unique_tags_per_empresa, names='empresa', values='percentage', hole=0.5,
+                                       title='Percentual e Quantidade de Tags Únicas por Empresa',
+                                       labels={'percentage': 'Percentual'})
+    
+    # Optional: Customize chart appearance
+    fig_donut_tags_percentage.update_traces(textinfo='percent+label', pull=[0.05 for _ in unique_tags_per_empresa['empresa']])
+    fig_donut_tags_percentage.update_layout(legend_title='Empresa')
+    
+    # Step 3: Display the Chart in col19
+    col21.plotly_chart(fig_donut_tags_percentage, use_container_width=True)
+
 
 
     # Filter for 'CORRETIVA' in 'tipomanutencao'

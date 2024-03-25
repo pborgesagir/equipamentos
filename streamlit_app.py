@@ -721,13 +721,39 @@ if authentication_status:
     slope, intercept = reg.coef_[0], reg.intercept_
     equation = f'MTBF = {slope:.2f}*PM/CM + {intercept:.2f}'
     
-    # Step 4: Plot
-    fig = px.scatter(agg_data, x='PM/CM', y='MTBF', hover_name='familia', trendline="ols", title='MTBF x Razão PM/CM')
-    fig.add_traces(px.line(agg_data, x='PM/CM', y='Predicted_MTBF', title="").data)
-    fig.update_layout(annotations=[dict(x=0.5, y=0.9, xref="paper", yref="paper", text=equation, showarrow=False)])
+    # # Step 4: Plot
+    # fig = px.scatter(agg_data, x='PM/CM', y='MTBF', hover_name='familia', trendline="ols", title='MTBF x Razão PM/CM')
+    # fig.add_traces(px.line(agg_data, x='PM/CM', y='Predicted_MTBF', title="").data)
+    # fig.update_layout(annotations=[dict(x=0.5, y=0.9, xref="paper", yref="paper", text=equation, showarrow=False)])
+
+
+    # Calculate residuals (difference between actual and predicted MTBF)
+    agg_data['residual'] = agg_data['MTBF'] - agg_data['Predicted_MTBF']
+    
+    # Assign colors based on the position relative to the regression line
+    agg_data['color'] = np.where(agg_data['residual'] >= 0, 'blue', 'orange')
+    
+    # Plot with customized colors
+    fig = go.Figure()
+    
+    # Add the regression line
+    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['Predicted_MTBF'], mode='lines', name='Regression Line'))
+    
+    # Add points, coloring based on their position relative to the regression line
+    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='Actual MTBF',
+                             marker=dict(color=agg_data['color']), text=agg_data['familia']))
+    
+    # Update layout with titles and labels
+    fig.update_layout(title='MTBF x Razão PM/CM com cores diferenciadas por posição relativa à linha de regressão',
+                      xaxis_title='PM/CM Ratio', yaxis_title='MTBF',
+                      legend_title='Legend')
     
     # Display the plot in Streamlit
     col16.plotly_chart(fig, use_container_width=True)
+
+    
+    # # Display the plot in Streamlit
+    # col16.plotly_chart(fig, use_container_width=True)
 
 
 

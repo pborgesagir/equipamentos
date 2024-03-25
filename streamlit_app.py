@@ -724,7 +724,7 @@ if authentication_status:
     # # Step 4: Plot
     # fig = px.scatter(agg_data, x='PM/CM', y='MTBF', hover_name='familia', trendline="ols", title='MTBF x Razão PM/CM')
     # fig.add_traces(px.line(agg_data, x='PM/CM', y='Predicted_MTBF', title="").data)
-    # fig.update_layout(annotations=[dict(x=0.5, y=0.9, xref="paper", yref="paper", text=equation, showarrow=False)])
+    # fig.update_layout(annotations=[dict(x=0.5, y=0.9, xref="paper", yref="paper", text='equation', showarrow=False)])
 
 
     # Calculate residuals (difference between actual and predicted MTBF)

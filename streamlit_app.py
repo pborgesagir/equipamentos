@@ -75,7 +75,7 @@ if authentication_status:
     st.sidebar.title(f"Bem-vindo, {name}")
     conn = st.connection("gsheets", type=GSheetsConnection)
     
-    df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(14)))
+    df = conn.read(spreadsheet=url, worksheet="METRICAS", usecols=list(range(15)))
     df = df.sort_values("fechamento")
     # Remove duplicate rows based on the "os" column, keeping the first occurrence
     df = df.drop_duplicates(subset=['os', 'empresa'], keep='first')

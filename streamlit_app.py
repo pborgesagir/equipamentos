@@ -746,7 +746,6 @@ if authentication_status:
     # Update layout with titles and labels
     fig.update_layout(title='MTBF x Razão PM/CM',
                       xaxis_title='Razão PM/CM', yaxis_title='MTBF',
-                      text=equation,
                       legend_title='Legend')
     
     # Display the plot in Streamlit

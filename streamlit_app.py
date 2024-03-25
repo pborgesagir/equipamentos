@@ -844,20 +844,21 @@ if authentication_status:
     # Filter for 'CORRETIVA' in 'tipomanutencao'
     corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
     
-    # Count occurrences of each 'causa'
-    causa_counts = corretiva_df['causa'].value_counts().reset_index()
+    # Count occurrences of each 'causa' and get the top 8
+    causa_counts = corretiva_df['causa'].value_counts().nlargest(8).reset_index()
     causa_counts.columns = ['causa', 'quantidade']
     
-    # Generate the horizontal bar chart
+    # Generate the horizontal bar chart for the top 8 causes
     fig_col20 = px.bar(causa_counts, x='quantidade', y='causa', orientation='h',
-                       title='Quantidades por Causa em Manutenções Corretivas',
+                       title='Causas em Manutenções Corretivas',
                        labels={'quantidade': 'Quantidade', 'causa': 'Causa'})
     
     # Improve layout
     fig_col20.update_layout(xaxis_title="Quantidade", yaxis_title="Causa", title_x=0.5, yaxis={'categoryorder': 'total ascending'})
     
-    # Display the chart in a new column (assuming col20 is defined similarly to others)
+    # Display the chart in the specified column (col20 in this case)
     col20.plotly_chart(fig_col20, use_container_width=True)
+
 
 
 

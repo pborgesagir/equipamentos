@@ -540,7 +540,7 @@ if authentication_status:
                       title='Top 20 Equipamentos de menor MTBF (Mês)',
                       labels={'MTBF_months': 'MTBF (mês)', 'tag': 'Tag'},
                       template='plotly_white')
-    fig_col8.update_layout(xaxis_title="Equipamento", yaxis_title="MTBF (meses)", title_x=0.5, coloraxis_showscale=False)
+    fig_col8.update_layout(xaxis_title="Equipment Tag", yaxis_title="MTBF (Months)", title_x=0.5, coloraxis_showscale=False)
     col8.plotly_chart(fig_col8, use_container_width=True)
 
 

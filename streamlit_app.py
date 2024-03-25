@@ -851,7 +851,7 @@ if authentication_status:
     # Generate the horizontal bar chart for the top 8 causes
     fig_col20 = px.bar(causa_counts, x='quantidade', y='causa', orientation='h',
                        title='Causas das Corretivas',
-                       labels={'quantidade': 'Quantidade', 'causa': 'Causa'})
+                       labels={'quantidade': 'Quantidade', 'causa': ''})
     
     # Improve layout
     fig_col20.update_layout(xaxis_title="Quantidade", yaxis_title="Causa", title_x=0.5, yaxis={'categoryorder': 'total ascending'})

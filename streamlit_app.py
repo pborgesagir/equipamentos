@@ -740,7 +740,7 @@ if authentication_status:
     fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['Predicted_MTBF'], text=equation, mode='lines', name='Equação de Regressão'))
     
     # Add points, coloring based on their position relative to the regression line
-    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='',
+    fig.add_trace(go.Scatter(x=agg_data['PM/CM'], y=agg_data['MTBF'], mode='markers', name='Família',
                              marker=dict(color=agg_data['color']), text=agg_data['familia']))
     
     # Update layout with titles and labels

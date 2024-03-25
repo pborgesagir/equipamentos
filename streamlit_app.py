@@ -228,6 +228,8 @@ if authentication_status:
     col4 = st.columns(1)[0]
     col5 = st.columns(1)[0]
     col6 = st.columns(1)[0]
+    col22 = st.columns(1)[0]
+    col23 = st.columns(1)[0]
     col7 = st.columns(1)[0]
     col8 = st.columns(1)[0]
     col12 = st.columns(1)[0]

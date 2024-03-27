@@ -925,23 +925,27 @@ if authentication_status:
     # Display the chart in col23
     col23.plotly_chart(fig_col23, use_container_width=True)
 
-
-
-
-
     # Filter the DataFrame for 'CORRETIVA' maintenance requests
     corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
     
     # Extract the hour from the 'abertura' column
     corretiva_df['Hour'] = corretiva_df['abertura'].dt.hour
     
-    # Extract the day of the week from the 'abertura' column
-    corretiva_df['DayOfWeek'] = corretiva_df['abertura'].dt.day_name()
+    # Extract the day of the week from the 'abertura' column and translate to Portuguese
+    corretiva_df['DayOfWeek'] = corretiva_df['abertura'].dt.day_name().map({
+        'Monday': 'Segunda',
+        'Tuesday': 'Terça',
+        'Wednesday': 'Quarta',
+        'Thursday': 'Quinta',
+        'Friday': 'Sexta',
+        'Saturday': 'Sábado',
+        'Sunday': 'Domingo'
+    })
     
     # Create a pivot table counting the occurrences of each hour for each day of the week
     heatmap_data = corretiva_df.pivot_table(index='DayOfWeek', columns='Hour', aggfunc='size', fill_value=0)
     
-    # Reorder the index to have the days in order, Monday to Sunday
+    # Reorder the index to have the days in order from Monday to Sunday in Portuguese
     day_order = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']
     heatmap_data = heatmap_data.reindex(day_order)
     

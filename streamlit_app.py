@@ -235,6 +235,7 @@ if authentication_status:
     col8 = st.columns(1)[0]
     col12 = st.columns(1)[0]
     col2, col3 = st.columns(2)
+    col30 = st.columns(1)[0]
 
 
 

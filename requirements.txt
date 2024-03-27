@@ -13,3 +13,4 @@ pygwalker
 weasyprint
 scikit-learn
 statsmodels
+seaborn

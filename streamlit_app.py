@@ -925,6 +925,34 @@ if authentication_status:
     col23.plotly_chart(fig_col23, use_container_width=True)
 
 
+    # Filter the DataFrame for 'CORRETIVA' maintenance requests
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    
+    # Extract the hour from the 'abertura' column
+    corretiva_df['Hour'] = corretiva_df['abertura'].dt.hour
+    
+    # Extract the day of the week from the 'abertura' column
+    corretiva_df['DayOfWeek'] = corretiva_df['abertura'].dt.day_name()
+    
+    # Create a pivot table counting the occurrences of each hour for each day of the week
+    heatmap_data = corretiva_df.pivot_table(index='DayOfWeek', columns='Hour', aggfunc='size', fill_value=0)
+    
+    # Reorder the index to have the days in order, Monday to Sunday
+    day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    heatmap_data = heatmap_data.reindex(day_order)
+    
+    # Plot the heatmap
+    plt.figure(figsize=(15, 7))
+    sns.heatmap(heatmap_data, cmap='Blues', annot=True, fmt='d')
+    plt.title('Volume de abertura de OS Corretivas por horário')
+    plt.xlabel('Hora do Dia')
+    plt.ylabel('Dia da Semana')
+    
+    # Display the heatmap in a new column in Streamlit
+    col30, = st.columns(1)
+    col30.pyplot(plt)
+
+
 
 
 

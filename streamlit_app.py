@@ -233,7 +233,7 @@ if authentication_status:
     col14, col15 = st.columns(2)
     col19, col18 = st.columns(2)
     col20, col21 = st.columns(2)
-    col16 = st.columns(1)[0]
+    col31 = st.columns(1)[0]
     col1 = st.columns(1)[0]
     col9 = st.columns(1)[0]
     col4 = st.columns(1)[0]
@@ -246,6 +246,7 @@ if authentication_status:
     col12 = st.columns(1)[0]
     col2, col3 = st.columns(2)
     col30 = st.columns(1)[0]
+    col16 = st.columns(1)[0]
 
 
 
@@ -972,6 +973,27 @@ if authentication_status:
     
     # Display the chart in a new column in Streamlit
     col30.plotly_chart(fig, use_container_width=True)
+
+    # Aggregating data to get the count for each combination of 'causa' and 'familia'
+    aggregated_df = filtered_df.groupby(['causa', 'familia']).size().reset_index(name='count')
+    
+    # Sorting the aggregated data for better visualization, if necessary
+    aggregated_df = aggregated_df.sort_values(by=['causa', 'familia'], ascending=[True, True])
+
+    # Creating a treemap
+    fig = px.treemap(aggregated_df, 
+                     path=['causa', 'familia'], 
+                     values='count',
+                     color='count', 
+                     color_continuous_scale='RdYlGn', 
+                     title='Relação entre Causa e Família')
+    
+    # Enhancing layout
+    fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
+    
+    # Displaying the treemap in the Streamlit app
+    col31.plotly_chart(fig, use_container_width=True)
+
 
 
 

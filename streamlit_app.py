@@ -644,11 +644,37 @@ if authentication_status:
     
     
 
-    # Generate and download PDF
-    if st.button("Generate and Download PDF"):
-        pdf_buffer = create_pdf(user_comment)
-        st.markdown(create_download_link(pdf_buffer, "streamlit_report.pdf"), unsafe_allow_html=True)
+    # # Generate and download PDF
+    # if st.button("Generate and Download PDF"):
+    #     pdf_buffer = create_pdf(user_comment)
+    #     st.markdown(create_download_link(pdf_buffer, "streamlit_report.pdf"), unsafe_allow_html=True)
 
+    # # Ensure 'abertura' is in datetime format
+    # filtered_df['abertura'] = pd.to_datetime(filtered_df['abertura'], errors='coerce')
+    
+    # # Calculate 'tempo de resolução' as the difference between 'fechamento' and 'abertura' in days
+    # filtered_df['tempo_de_resolucao'] = (filtered_df['fechamento'] - filtered_df['abertura']).dt.days
+    
+    # # Aggregate the data to get average 'tempo de resolução' by a time period, e.g., 'Year-Month'
+    # avg_tempo_resolucao_per_period = filtered_df.groupby('Year-Month')['tempo_de_resolucao'].mean().reset_index()
+    
+    # # Sort the DataFrame by 'Year-Month' to ensure the line chart follows a chronological order
+    # avg_tempo_resolucao_per_period = avg_tempo_resolucao_per_period.sort_values('Year-Month')
+    
+    # # Plot the tendency line chart for 'Tempo médio de resolução'
+    # fig = px.line(avg_tempo_resolucao_per_period, x='Year-Month', y='tempo_de_resolucao',
+    #               title='MTTR ao longo do tempo (dias)',
+    #               labels={'tempo_de_resolucao': 'Tempo Médio de Resolução (Dias)', 'Year-Month': 'Mês'},
+    #               markers=True,  # Add markers to each data point for better visibility
+    #               template='plotly_white')
+    
+    # # Enhance layout
+    # fig.update_layout(xaxis_title="Mês",
+    #                   yaxis_title="Tempo Médio de Resolução (Dias)",
+    #                   title_x=0.5)
+    
+    # # Display the chart in col12
+    # col12.plotly_chart(fig, use_container_width=True)
 
 
 
@@ -659,23 +685,43 @@ if authentication_status:
     # Calculate 'tempo de resolução' as the difference between 'fechamento' and 'abertura' in days
     filtered_df['tempo_de_resolucao'] = (filtered_df['fechamento'] - filtered_df['abertura']).dt.days
     
-    # Aggregate the data to get average 'tempo de resolução' by a time period, e.g., 'Year-Month'
+    # Aggregate the data to get average 'tempo de resolução' by 'Year-Month'
     avg_tempo_resolucao_per_period = filtered_df.groupby('Year-Month')['tempo_de_resolucao'].mean().reset_index()
     
-    # Sort the DataFrame by 'Year-Month' to ensure the line chart follows a chronological order
+    # Sort the DataFrame by 'Year-Month' to ensure chronological order
     avg_tempo_resolucao_per_period = avg_tempo_resolucao_per_period.sort_values('Year-Month')
     
-    # Plot the tendency line chart for 'Tempo médio de resolução'
-    fig = px.line(avg_tempo_resolucao_per_period, x='Year-Month', y='tempo_de_resolucao',
-                  title='MTTR ao longo do tempo (dias)',
-                  labels={'tempo_de_resolucao': 'Tempo Médio de Resolução (Dias)', 'Year-Month': 'Mês'},
-                  markers=True,  # Add markers to each data point for better visibility
-                  template='plotly_white')
+    # Prepare data for linear regression (convert 'Year-Month' to a numeric value that represents time)
+    avg_tempo_resolucao_per_period['Time'] = np.arange(len(avg_tempo_resolucao_per_period))
     
-    # Enhance layout
-    fig.update_layout(xaxis_title="Mês",
+    # Perform linear regression
+    slope, intercept = np.polyfit(avg_tempo_resolucao_per_period['Time'], avg_tempo_resolucao_per_period['tempo_de_resolucao'], 1)
+    # Predict values using the regression model
+    avg_tempo_resolucao_per_period['Regression'] = slope * avg_tempo_resolucao_per_period['Time'] + intercept
+    
+    # Calculate R²
+    correlation_matrix = np.corrcoef(avg_tempo_resolucao_per_period['tempo_de_resolucao'], avg_tempo_resolucao_per_period['Regression'])
+    correlation_xy = correlation_matrix[0,1]
+    r_squared = correlation_xy**2
+    
+    # Plot the line chart for 'Tempo médio de resolução' and the regression line
+    fig = go.Figure()
+    
+    # Original data
+    fig.add_trace(go.Scatter(x=avg_tempo_resolucao_per_period['Year-Month'], y=avg_tempo_resolucao_per_period['tempo_de_resolucao'],
+                             mode='markers+lines', name='Tempo Médio de Resolução'))
+    
+    # Regression line
+    fig.add_trace(go.Scatter(x=avg_tempo_resolucao_per_period['Year-Month'], y=avg_tempo_resolucao_per_period['Regression'],
+                             mode='lines', name='Linha de Regressão'))
+    
+    # Enhance layout and add annotations for equation and R²
+    fig.update_layout(title='MTTR ao longo do tempo (dias) com Linha de Regressão',
+                      xaxis_title="Mês",
                       yaxis_title="Tempo Médio de Resolução (Dias)",
-                      title_x=0.5)
+                      title_x=0.5,
+                      annotations=[dict(xref='paper', yref='paper', x=0.03, y=1.08, showarrow=False,
+                                        text=f"Equação: y = {slope:.2f}x + {intercept:.2f}, R² = {r_squared:.2f}")])
     
     # Display the chart in col12
     col12.plotly_chart(fig, use_container_width=True)

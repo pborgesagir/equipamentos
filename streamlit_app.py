@@ -454,6 +454,25 @@ if authentication_status:
     # col3.plotly_chart(fig, use_container_width=True)
 
 
+    # List of 'familia' values to exclude
+    familia_to_exclude = [
+        "OFTALMOSCOPIO",
+        "OTOSCOPIO",
+        "ESTETOSCOPIO ADULTO",
+        "ESTETOSCOPIO PEDIATRICO",
+        "ESFIGMOMANOMETRO ADULTO",
+        "ESFIGMOMANOMETRO DIGITAL",
+        "ESFIGMOMANOMETRO PEDIATRICO",
+        "BRACADEIRA PARA MONITOR",
+        "SENSOR DE TEMPERATURA",
+        "CABO DE FORCA",
+        "OFTALMOSCOPIO INDIRETO"
+    ]
+    
+    # Filter out the specified 'familia' values before further processing
+    filtered_df = filtered_df[~filtered_df['familia'].isin(familia_to_exclude)]
+
+
 
     # Ensure 'cadastro' and 'instalacao' are in datetime format
     filtered_df['cadastro'] = pd.to_datetime(filtered_df['cadastro'], errors='coerce')

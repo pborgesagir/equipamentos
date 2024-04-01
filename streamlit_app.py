@@ -156,7 +156,7 @@ if authentication_status:
     desired_numero_setor.insert(0, "Todos")
     
     # Create a filter for selecting "setor"
-    numero_causa = st.sidebar.multiselect("SETOR", desired_numero_causa, default=desired_numero_causa[0])
+    numero_causa = st.sidebar.multiselect("CAUSA", desired_numero_causa, default=desired_numero_causa[0])
 
     
     

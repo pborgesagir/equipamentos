@@ -151,6 +151,13 @@ if authentication_status:
     # Create a filter for selecting "setor"
     numero_setor = st.sidebar.multiselect("SETOR", desired_numero_setor, default=desired_numero_setor[0])
 
+    # Define the list of "causa" values and add "Todos" as an option
+    desired_numero_causa = df["causa"].unique().tolist()
+    desired_numero_setor.insert(0, "Todos")
+    
+    # Create a filter for selecting "setor"
+    numero_causa = st.sidebar.multiselect("SETOR", desired_numero_causa, default=desired_numero_causa[0])
+
     
     
     # Create a sidebar for selecting filters (Assuming you're using Streamlit)
@@ -192,6 +199,9 @@ if authentication_status:
     
     if numero_setor and numero_setor != ["Todos"]:
         filtered_df = filtered_df[filtered_df["setor"].isin(numero_setor)]
+
+    if numero_causa and numero_causa != ["Todos"]:
+        filtered_df = filtered_df[filtered_df["causa"].isin(numero_causa)]
 
     # Extract the minimum and maximum dates from the filtered DataFrame
     min_date = filtered_df['fechamento'].min().strftime('%Y-%m-%d')

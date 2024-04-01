@@ -974,25 +974,29 @@ if authentication_status:
     # Display the chart in a new column in Streamlit
     col30.plotly_chart(fig, use_container_width=True)
 
-    # Aggregating data to get the count for each combination of 'causa' and 'familia'
-    aggregated_df = filtered_df.groupby(['causa', 'familia']).size().reset_index(name='count')
+    # Filter the DataFrame for 'CORRETIVA' maintenance requests only
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    
+    # Aggregating data to get the count for each combination of 'causa' and 'familia' within 'CORRETIVA' maintenance type
+    aggregated_corretiva_df = corretiva_df.groupby(['causa', 'familia']).size().reset_index(name='count')
     
     # Sorting the aggregated data for better visualization, if necessary
-    aggregated_df = aggregated_df.sort_values(by=['causa', 'familia'], ascending=[True, True])
-
-    # Creating a treemap
-    fig = px.treemap(aggregated_df, 
+    aggregated_corretiva_df = aggregated_corretiva_df.sort_values(by=['causa', 'familia'], ascending=[True, True])
+    
+    # Creating a treemap with the filtered and aggregated data
+    fig = px.treemap(aggregated_corretiva_df, 
                      path=['causa', 'familia'], 
                      values='count',
                      color='count', 
                      color_continuous_scale='RdYlGn', 
-                     title='Relação entre Causa e Família')
+                     title='Relação entre Causa e Família (CORRETIVA)')
     
     # Enhancing layout
     fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
     
-    # Displaying the treemap in the Streamlit app
+    # Displaying the treemap in the Streamlit app on the specified column (assuming you have a column named 'col31')
     col31.plotly_chart(fig, use_container_width=True)
+
 
 
 

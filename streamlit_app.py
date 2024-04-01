@@ -1067,46 +1067,50 @@ if authentication_status:
 
 
 
-    # Step 1: Filter for 'CORRETIVA' maintenance orders
+    # Step 1: Filter for 'CORRETIVA' maintenance types
     corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
     
-    # Ensure 'abertura' and 'fechamento' are in datetime format for accurate processing
+    # Ensure 'abertura' and 'fechamento' are in datetime format
     corretiva_df['abertura'] = pd.to_datetime(corretiva_df['abertura'], errors='coerce')
     corretiva_df['fechamento'] = pd.to_datetime(corretiva_df['fechamento'], errors='coerce')
     
-    # Calculate 'Year-Month' for 'abertura' and 'fechamento'
-    corretiva_df['Year-Month Abertura'] = corretiva_df['abertura'].dt.strftime('%Y-%m')
-    corretiva_df['Year-Month Fechamento'] = corretiva_df['fechamento'].dt.strftime('%Y-%m')
+    # Extract Year-Month from 'abertura' and 'fechamento' dates
+    corretiva_df['Year-Month Abertura'] = corretiva_df['abertura'].dt.to_period('M').astype(str)
+    corretiva_df['Year-Month Fechamento'] = corretiva_df['fechamento'].dt.to_period('M').astype(str)
     
-    # Step 2 and 3: Group by 'Year-Month' and count the number of orders opened and closed
-    opened_counts = corretiva_df.groupby('Year-Month Abertura').size().reset_index(name='Opened')
-    closed_counts = corretiva_df.groupby('Year-Month Fechamento').size().reset_index(name='Closed')
+    # Step 2: Calculate Opened and Closed per Month
+    opened_per_month = corretiva_df.groupby('Year-Month Abertura').size().reset_index(name='Opened')
+    closed_per_month = corretiva_df.groupby('Year-Month Fechamento').size().reset_index(name='Closed')
     
-    # Merge the opened and closed counts on their 'Year-Month'
-    monthly_counts = pd.merge(opened_counts, closed_counts, left_on='Year-Month Abertura', right_on='Year-Month Fechamento', how='outer').fillna(0)
-    monthly_counts['Year-Month'] = monthly_counts['Year-Month Abertura'].combine_first(monthly_counts['Year-Month Fechamento'])
+    # Merge the opened and closed counts on 'Year-Month'
+    monthly_data = pd.merge(opened_per_month, closed_per_month, left_on='Year-Month Abertura', right_on='Year-Month Fechamento', how='outer').fillna(0)
+    monthly_data.rename(columns={'Year-Month Abertura': 'Year-Month'}, inplace=True)
     
-    # Step 4: Calculate the ratio of closed/opened for each month as a percentage
-    monthly_counts['Pendencia_Percentage'] = (monthly_counts['Closed'] / monthly_counts['Opened']) * 100
+    # Ensure that all counts are integers
+    monthly_data['Opened'] = monthly_data['Opened'].astype(int)
+    monthly_data['Closed'] = monthly_data['Closed'].astype(int)
     
-    # Correct potential infinities or NaNs if any month had 0 opened orders
-    monthly_counts['Pendencia_Percentage'].replace([np.inf, -np.inf], np.nan, inplace=True)
-    monthly_counts.fillna(0, inplace=True)
+    # Step 3: Calculate Pending Percentage
+    monthly_data['Pending'] = (monthly_data['Opened'] - monthly_data['Closed']) / monthly_data['Opened']
+    monthly_data['Pending Percentage'] = monthly_data['Pending'] * 100  # Convert to percentage
     
-    # Step 5: Plot the line chart
-    fig = px.line(monthly_counts, x='Year-Month', y='Pendencia_Percentage',
+    # Step 4: Plot the Line Chart
+    import plotly.express as px
+    
+    fig = px.line(monthly_data, x='Year-Month', y='Pending Percentage',
                   title='Pendências de Manutenções Corretivas (%)',
-                  labels={'Pendencia_Percentage': 'Pendências (%)', 'Year-Month': 'Mês'},
-                  markers=True,  # Add markers for better visibility
+                  labels={'Pending Percentage': 'Pendência (%)', 'Year-Month': 'Mês'},
+                  markers=True,  # Add markers to each data point for better visibility
                   template='plotly_white')
     
     # Enhance layout
     fig.update_layout(xaxis_title="Mês",
-                      yaxis_title="Pendências (%)",
+                      yaxis_title="Pendência (%)",
                       title_x=0.5)
     
-    # Display the chart in col32
+    # Display the chart in col32 (assuming 'col32' is a defined column in your Streamlit app)
     col32.plotly_chart(fig, use_container_width=True)
+
 
 
 

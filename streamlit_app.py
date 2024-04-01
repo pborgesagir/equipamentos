@@ -246,6 +246,9 @@ if authentication_status:
     col12 = st.columns(1)[0]
     col2, col3 = st.columns(2)
     col30 = st.columns(1)[0]
+    col32, col33 = st.columns(2)
+
+   
     col16 = st.columns(1)[0]
 
 
@@ -1061,6 +1064,50 @@ if authentication_status:
     
     # Displaying the treemap in the Streamlit app on the specified column (assuming you have a column named 'col31')
     col31.plotly_chart(fig, use_container_width=True)
+
+
+
+    # Step 1: Filter for 'CORRETIVA' maintenance orders
+    corretiva_df = filtered_df[filtered_df['tipomanutencao'] == 'CORRETIVA']
+    
+    # Ensure 'abertura' and 'fechamento' are in datetime format for accurate processing
+    corretiva_df['abertura'] = pd.to_datetime(corretiva_df['abertura'], errors='coerce')
+    corretiva_df['fechamento'] = pd.to_datetime(corretiva_df['fechamento'], errors='coerce')
+    
+    # Calculate 'Year-Month' for 'abertura' and 'fechamento'
+    corretiva_df['Year-Month Abertura'] = corretiva_df['abertura'].dt.strftime('%Y-%m')
+    corretiva_df['Year-Month Fechamento'] = corretiva_df['fechamento'].dt.strftime('%Y-%m')
+    
+    # Step 2 and 3: Group by 'Year-Month' and count the number of orders opened and closed
+    opened_counts = corretiva_df.groupby('Year-Month Abertura').size().reset_index(name='Opened')
+    closed_counts = corretiva_df.groupby('Year-Month Fechamento').size().reset_index(name='Closed')
+    
+    # Merge the opened and closed counts on their 'Year-Month'
+    monthly_counts = pd.merge(opened_counts, closed_counts, left_on='Year-Month Abertura', right_on='Year-Month Fechamento', how='outer').fillna(0)
+    monthly_counts['Year-Month'] = monthly_counts['Year-Month Abertura'].combine_first(monthly_counts['Year-Month Fechamento'])
+    
+    # Step 4: Calculate the ratio of closed/opened for each month as a percentage
+    monthly_counts['Pendencia_Percentage'] = (monthly_counts['Closed'] / monthly_counts['Opened']) * 100
+    
+    # Correct potential infinities or NaNs if any month had 0 opened orders
+    monthly_counts['Pendencia_Percentage'].replace([np.inf, -np.inf], np.nan, inplace=True)
+    monthly_counts.fillna(0, inplace=True)
+    
+    # Step 5: Plot the line chart
+    fig = px.line(monthly_counts, x='Year-Month', y='Pendencia_Percentage',
+                  title='Pendências de Manutenções Corretivas (%)',
+                  labels={'Pendencia_Percentage': 'Pendências (%)', 'Year-Month': 'Mês'},
+                  markers=True,  # Add markers for better visibility
+                  template='plotly_white')
+    
+    # Enhance layout
+    fig.update_layout(xaxis_title="Mês",
+                      yaxis_title="Pendências (%)",
+                      title_x=0.5)
+    
+    # Display the chart in col32
+    col32.plotly_chart(fig, use_container_width=True)
+
 
 
 

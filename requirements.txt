@@ -14,3 +14,4 @@ weasyprint
 scikit-learn
 statsmodels
 seaborn
+streamlit-server-state

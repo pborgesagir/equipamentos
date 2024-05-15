@@ -21,8 +21,8 @@ stage_descriptions = {
     2: "Fundação: Estruturação da base da construção.",
     3: "Estrutura 1º andar: Construção do primeiro andar.",
     4: "Estrutura 2º andar e cobertura: Construção do segundo andar e finalização do teto.",
-    5: "Alvenaria 1º andar: Montagem das paredes do primeiro andar.",
-    6: "Alvenaria 2º andar: Montagem das paredes do segundo andar.",
+    5: "Revestimento 1º andar: Montagem das paredes e revestimento do primeiro andar.",
+    6: "Revestimento 2º andar: Montagem das paredes e revestimento do segundo andar.",
     7: "Acabamento: Entrega da obra.",
 
 }

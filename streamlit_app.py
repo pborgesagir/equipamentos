@@ -16,9 +16,13 @@ etapa_to_image = {
 
 }
 
-# Create columns for each participant
-col1, col2, col3 = st.columns(3)
-columns = [col1, col2, col3]
+# # Create columns for each participant
+# col1, col2, col3 = st.columns(3)
+# columns = [col1, col2, col3]
+
+# # Create columns for each participant
+col1 = st.columns(1)
+columns = [col1]
 
 # Display images according to scores
 for i, person in enumerate(['Kaio', 'Pedro', 'Regilane']):

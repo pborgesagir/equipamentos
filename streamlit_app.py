@@ -27,7 +27,7 @@ def display_image(score):
     return Image.open(image_path)
 
 # Streamlit layout
-st.title("Squad Scoreboard")
+st.title("Placar GCINFRA")
 
 # Squad scores
 for name, score in server_state['scores'].items():

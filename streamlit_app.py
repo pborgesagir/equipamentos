@@ -28,7 +28,7 @@ for i, person in enumerate(['Kaio', 'Pedro', 'Regilane']):
     columns[i].image(image_path, caption=f'Stage {score}')
 
 # Add a legend explaining each stage
-st.subheader('Legend')
+st.subheader('Legenda')
 for stage, image in stage_to_image.items():
-    st.write(f'Stage {stage}: {image.split(".")[0]}')
+    st.write(f'Etapa da obra {stage}: {image.split(".")[0]}')
 

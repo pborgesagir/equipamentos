@@ -1,38 +1,37 @@
 import streamlit as st
 import pandas as pd
 
-# Load the CSV data
-data = pd.read_csv('scoreboard - Sheet1.csv')
+# Load data from CSV
+df = pd.read_csv("scoreboard - Sheet1.csv")
 
-# Define a mapping from etapas to images
-etapa_to_image = {
-    1: 'movimentacao.jpg',
-    2: 'fundacao.jpg',
-    3: 'estrutura1.jpg',
-    4: 'estrutura2.jpg',
-    5: 'revestimento1.jpg',
-    6: 'revestimento2.jpg',
-    7: 'cobertura.jpg',
-
+# Define a dictionary linking scores to image filenames
+image_dict = {
+    1: "movimentacao.jpg",
+    2: "fundacao.jpg",
+    3: "estrutura1.jpg",
+    4: "estrutura2.jpg",
+    5: "alvenaria1.jpg",
+    6: "alvenaria2.jpg",
+    7: "revestimento1.jpg",
+    8: "revestimento2.jpg"
 }
 
-# # Create columns for each participant
-# col1, col2, col3 = st.columns(3)
-# columns = [col1, col2, col3]
+# Define a dictionary for legends
+legend_dict = {
+    1: "Movimentação de Terra - Preparing the site for construction.",
+    2: "Fundação - Laying the foundation.",
+    3: "Estrutura 1º andar - Constructing the first floor structure.",
+    4: "Estrutura 2º andar e cobertura - Constructing the second floor and roof.",
+    5: "Alvenaria 1º andar - Building the walls for the first floor.",
+    6: "Alvenaria 2º andar - Building the walls for the second floor.",
+    7: "Acabamento 1º andar - Finishing the first floor.",
+    8: "Acabamento 2º andar - Finishing the second floor."
+}
 
-# # Create columns for each participant
-col1, col2, col3 = st.columns(3)
-columns = [col1, col2, col3]
-
-# Display images according to scores
-for i, person in enumerate(["Kaio", "Pedro", "Regilane"]):
-    columns[i].subheader(person)
-    score = data[person][0]  # Assuming each person has only one score in the CSV
-    image_path = etapa_to_image[score]
-    columns[i].image(image_path, caption=f'etapa {score}')
-
-# Add a legend explaining each etapa
-st.subheader('Legenda')
-for etapa, image in etapa_to_image.items():
-    st.write(f'Etapa da obra {etapa}: {image.split(".")[0]}')
-
+# Display the information
+for index, row in df.iterrows():
+    st.header(f"Stage for {row['Name']}")
+    stage = row['Stage']
+    if stage in image_dict:
+        st.image(image_dict[stage], caption=f"Stage {stage}")
+        st.write(legend_dict[stage])

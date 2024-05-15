@@ -10,10 +10,10 @@ stage_to_image = {
     2: 'fundacao.jpg',
     3: 'estrutura1.jpg',
     4: 'estrutura2.jpg',
-    5: 'alvenaria1.jpg',
-    6: 'alvenaria2.jpg',
-    7: 'revestimento1.jpg',
-    8: 'cobertura.jpg',
+    5: 'revestimento1.jpg',
+    6: 'revestimento2.jpg',
+    7: 'cobertura.jpg',
+
 }
 
 # Create columns for each participant

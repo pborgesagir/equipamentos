@@ -25,7 +25,7 @@ col1 = st.columns(1)
 columns = [col1]
 
 # Display images according to scores
-for i, person in enumerate(['Kaio', 'Pedro', 'Regilane']):
+for i, person in enumerate(['Kaio']):
     columns[i].subheader(person)
     score = data[person][0]  # Assuming each person has only one score in the CSV
     image_path = etapa_to_image[score]

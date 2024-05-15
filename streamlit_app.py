@@ -29,8 +29,8 @@ stage_descriptions = {
     4: "Estrutura 2º andar e cobertura: Construção do segundo andar e finalização do teto.",
     5: "Alvenaria 1º andar: Montagem das paredes do primeiro andar.",
     6: "Alvenaria 2º andar: Montagem das paredes do segundo andar.",
-    7: "Acabamento 1º andar: Finalização interna do primeiro andar.",
-    8: "Acabamento 2º andar: Finalização interna do segundo andar."
+    7: "Acabamento: Entrega da obra.",
+
 }
 
 # Set the current stage here

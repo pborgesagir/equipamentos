@@ -25,7 +25,7 @@ stage_descriptions = {
 }
 
 # Set the current stage here
-current_stage = 3  # Change this number to reflect the current stage
+current_stage = 2  # Change this number to reflect the current stage
 
 # Display the image
 if current_stage in image_files:

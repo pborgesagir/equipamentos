@@ -26,7 +26,7 @@ stage_descriptions = {
 }
 
 # Set the current stage here
-current_stage = 3  # Change this number to reflect the current stage
+current_stage = 2  # Change this number to reflect the current stage
 
 # Display the title
 st.title("Placar Envolvente - GCINFRA")

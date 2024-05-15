@@ -17,7 +17,7 @@ score_to_image = {
 # Load the CSV file
 @st.cache
 def load_data():
-    df = pd.read_csv("/mnt/data/scoreboard - Sheet2.csv")
+    df = pd.read_csv("scoreboard - Sheet2.csv")
     return df
 
 df = load_data()

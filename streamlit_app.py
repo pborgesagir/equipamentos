@@ -1,61 +1,40 @@
 import streamlit as st
 from PIL import Image
 from streamlit_server_state import server_state, server_state_lock
+import pandas as pd
+
+# Load initial scores from CSV
+score_data = pd.read_csv("scoreboard - Sheet1.csv")
+initial_scores = score_data.iloc[0].to_dict()
 
 # Initialize the server state for scores if not already present
 if 'scores' not in server_state:
-    server_state['scores'] = {'squad1': 0, 'squad2': 0, 'squad3': 0}
+    server_state['scores'] = initial_scores
 
-# Function to update score
-def update_score(squad, change):
-    with server_state_lock['scores']:
-        server_state['scores'][squad] += change
-        if server_state['scores'][squad] < 0:
-            server_state['scores'][squad] = 0
-
-# Load avatar images
-avatar1 = Image.open("avatar1.jpg")
-avatar2 = Image.open("avatar2.jpg")
-avatar3 = Image.open("avatar3.jpg")
+# Function to display the corresponding image based on the score
+def display_image(score):
+    images = {
+        1: "movimentacao.jpg",
+        2: "fundacao.jpg",
+        3: "estrutura1.jpg",
+        4: "estrutura2.jpg",
+        5: "alvenaria1.jpg",
+        6: "alvenaria2.jpg",
+        7: "revestimento1.jpg",
+        8: "revestimento2.jpg",
+    }
+    image_path = images.get(score, "default.jpg")  # default image if score is out of range
+    return Image.open(image_path)
 
 # Streamlit layout
 st.title("Squad Scoreboard")
 
-# Squad 1
-col1, col2, col3, col4 = st.columns([1, 2, 1, 2])
-with col1:
-    st.image(avatar1, width=50)
-with col2:
-    st.subheader("Squad 1")
-with col3:
-    if st.button("➖", key="dec_squad1"):
-        update_score('squad1', -1)
-    st.subheader(server_state['scores']['squad1'])
-    if st.button("➕", key="inc_squad1"):
-        update_score('squad1', 1)
-
-# Squad 2
-col1, col2, col3, col4 = st.columns([1, 2, 1, 2])
-with col1:
-    st.image(avatar2, width=50)
-with col2:
-    st.subheader("Squad 2")
-with col3:
-    if st.button("➖", key="dec_squad2"):
-        update_score('squad2', -1)
-    st.subheader(server_state['scores']['squad2'])
-    if st.button("➕", key="inc_squad2"):
-        update_score('squad2', 1)
-
-# Squad 3
-col1, col2, col3, col4 = st.columns([1, 2, 1, 2])
-with col1:
-    st.image(avatar3, width=50)
-with col2:
-    st.subheader("Squad 3")
-with col3:
-    if st.button("➖", key="dec_squad3"):
-        update_score('squad3', -1)
-    st.subheader(server_state['scores']['squad3'])
-    if st.button("➕", key="inc_squad3"):
-        update_score('squad3', 1)
+# Squad scores
+for name, score in server_state['scores'].items():
+    col1, col2, col3 = st.columns([1, 3, 1])
+    with col1:
+        st.image(display_image(score), width=100)  # Display image based on the score
+    with col2:
+        st.subheader(name)  # Display squad name
+    with col3:
+        st.subheader(score)  # Display squad score

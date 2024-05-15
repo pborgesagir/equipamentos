@@ -21,11 +21,11 @@ etapa_to_image = {
 # columns = [col1, col2, col3]
 
 # # Create columns for each participant
-col1 = st.columns(1)
-columns = [col1]
+col1, col2, col3 = st.columns(3)
+columns = [col1, col2, col3]
 
 # Display images according to scores
-for i, person in enumerate(['Kaio']):
+for i, person in enumerate(["Kaio", "Pedro", "Regilane"]):
     columns[i].subheader(person)
     score = data[person][0]  # Assuming each person has only one score in the CSV
     image_path = etapa_to_image[score]

@@ -7,9 +7,10 @@ image_files = {
     2: "fundacao.jpg",
     3: "estrutura1.jpg",
     4: "estrutura2.jpg",
-    5: "revestimento1.jpg",
-    6: "revestimento2.jpg",
-    7: "cobertura.jpg"
+    5: "alvenaria1.jpg",
+    6: "alvenaria2.jpg",
+    7: "revestimento1.jpg",
+    8: "revestimento2.jpg"
 }
 
 # Stage descriptions
@@ -25,12 +26,20 @@ stage_descriptions = {
 }
 
 # Set the current stage here
-current_stage = 2  # Change this number to reflect the current stage
+current_stage = 3  # Change this number to reflect the current stage
+
+# Display the title
+st.title("Placar Envolvente - GCINFRA")
 
 # Display the image
 if current_stage in image_files:
     image = Image.open(image_files[current_stage])
-    st.image(image, use_column_width=True)  # Display image to fill the column
+    st.image(image, width=400)  # Set the width to 400 pixels
     st.write(stage_descriptions[current_stage])  # Display the stage description
 else:
     st.error("Invalid stage number. Please choose a number between 1 and 8.")
+
+# Display legend
+st.subheader("Legenda das Etapas:")
+for stage, description in stage_descriptions.items():
+    st.write(f"{stage}: {description}")

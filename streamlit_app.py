@@ -4,8 +4,8 @@ import pandas as pd
 # Load the CSV data
 data = pd.read_csv('scoreboard - Sheet1.csv')
 
-# Define a mapping from stages to images
-stage_to_image = {
+# Define a mapping from etapas to images
+etapa_to_image = {
     1: 'movimentacao.jpg',
     2: 'fundacao.jpg',
     3: 'estrutura1.jpg',
@@ -24,11 +24,11 @@ columns = [col1, col2, col3]
 for i, person in enumerate(['Kaio', 'Pedro', 'Regilane']):
     columns[i].subheader(person)
     score = data[person][0]  # Assuming each person has only one score in the CSV
-    image_path = stage_to_image[score]
-    columns[i].image(image_path, caption=f'Stage {score}')
+    image_path = etapa_to_image[score]
+    columns[i].image(image_path, caption=f'etapa {score}')
 
-# Add a legend explaining each stage
+# Add a legend explaining each etapa
 st.subheader('Legenda')
-for stage, image in stage_to_image.items():
-    st.write(f'Etapa da obra {stage}: {image.split(".")[0]}')
+for etapa, image in etapa_to_image.items():
+    st.write(f'Etapa da obra {etapa}: {image.split(".")[0]}')
 
